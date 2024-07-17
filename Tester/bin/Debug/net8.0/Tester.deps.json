@@ -1,0 +1,36 @@
+{
+  "runtimeTarget": {
+    "name": ".NETCoreApp,Version=v8.0",
+    "signature": ""
+  },
+  "compilationOptions": {},
+  "targets": {
+    ".NETCoreApp,Version=v8.0": {
+      "Tester/1.0.0": {
+        "dependencies": {
+          "GwentCompiler": "1.0.0"
+        },
+        "runtime": {
+          "Tester.dll": {}
+        }
+      },
+      "GwentCompiler/1.0.0": {
+        "runtime": {
+          "GwentCompiler.dll": {}
+        }
+      }
+    }
+  },
+  "libraries": {
+    "Tester/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "GwentCompiler/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    }
+  }
+}

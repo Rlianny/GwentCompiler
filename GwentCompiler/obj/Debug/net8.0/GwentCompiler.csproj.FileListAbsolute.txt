@@ -1,0 +1,11 @@
+/home/lianny/$/home/lianny/Proyecto/ProyectoGwent++/Compiler/GwentCompiler/bin/Debug/net8.0/GwentCompiler.deps.json
+/home/lianny/$/home/lianny/Proyecto/ProyectoGwent++/Compiler/GwentCompiler/bin/Debug/net8.0/GwentCompiler.dll
+/home/lianny/$/home/lianny/Proyecto/ProyectoGwent++/Compiler/GwentCompiler/bin/Debug/net8.0/GwentCompiler.pdb
+/home/lianny/$/home/lianny/Proyecto/ProyectoGwent++/Compiler/GwentCompiler/obj/Debug/net8.0/GwentCompiler.GeneratedMSBuildEditorConfig.editorconfig
+/home/lianny/$/home/lianny/Proyecto/ProyectoGwent++/Compiler/GwentCompiler/obj/Debug/net8.0/GwentCompiler.AssemblyInfoInputs.cache
+/home/lianny/$/home/lianny/Proyecto/ProyectoGwent++/Compiler/GwentCompiler/obj/Debug/net8.0/GwentCompiler.AssemblyInfo.cs
+/home/lianny/$/home/lianny/Proyecto/ProyectoGwent++/Compiler/GwentCompiler/obj/Debug/net8.0/GwentCompiler.csproj.CoreCompileInputs.cache
+/home/lianny/$/home/lianny/Proyecto/ProyectoGwent++/Compiler/GwentCompiler/obj/Debug/net8.0/GwentCompiler.dll
+/home/lianny/$/home/lianny/Proyecto/ProyectoGwent++/Compiler/GwentCompiler/obj/Debug/net8.0/refint/GwentCompiler.dll
+/home/lianny/$/home/lianny/Proyecto/ProyectoGwent++/Compiler/GwentCompiler/obj/Debug/net8.0/GwentCompiler.pdb
+/home/lianny/$/home/lianny/Proyecto/ProyectoGwent++/Compiler/GwentCompiler/obj/Debug/net8.0/ref/GwentCompiler.dll
