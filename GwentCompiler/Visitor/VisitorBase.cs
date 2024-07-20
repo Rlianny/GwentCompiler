@@ -2,11 +2,14 @@ namespace GwentCompiler;
 
 public abstract class VisitorBase<TResult> : IVisitor<TResult>, IErrorReporter
 {
+    public bool hadError { get; set; }
+
     public void GenerateError(string message, CodeLocation errorLocation)
     {
         SemanticError newError = new SemanticError(message, errorLocation);
         Error.AllErrors.Add(newError);
         Report(newError);
+        hadError = true;
     }
 
     public void Report(Error error)

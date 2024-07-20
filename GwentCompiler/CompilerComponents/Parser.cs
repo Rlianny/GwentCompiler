@@ -7,6 +7,9 @@ public class Parser : IErrorReporter
 {
     private List<Token> tokens = new();
     private int current;
+
+    public bool hadError { get; set; }
+
     public Parser(List<Token> tokens)
     {
         this.tokens = tokens;
@@ -306,7 +309,7 @@ public class Parser : IErrorReporter
         }
 
         else GenerateError("Expression expected", Peek().Location); // Si ninguno de los casos coincide, significa que estamos sentados sobre un token que no puede iniciar una expresión
-        throw new Exception();
+        return null;
     }
 
     private IExpression Access(IExpression left)
@@ -539,6 +542,7 @@ public class Parser : IErrorReporter
         ParseError newError = new ParseError(message, errorLocation);
         Error.AllErrors.Add(newError);
         Report(newError);
+        hadError = true;
     }
 
     public void Report(Error error)

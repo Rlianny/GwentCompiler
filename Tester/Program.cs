@@ -1,5 +1,5 @@
 ﻿namespace GwentCompiler;
-class Program
+static class Program
 {
     // Para probar el código puede escribir en el archivo Input dentro de la carpeta TestFile de este repositorio, solo cambie el valor de path
     // por la ruta real del repositorio en su equipo. 
@@ -15,17 +15,7 @@ class Program
     static void Main()
     {
         string path = GetFileContent("/home/lianny/$/home/lianny/Proyecto/ProyectoGwent++/Compiler/TestFile/Input");
-
-        Lexer lexer = new Lexer();
-        List<Token> tokens = lexer.Tokenize(path);
-
-        Parser parser = new Parser(tokens);
-        List<IStatement> program = parser.Parse();
-
-
-        Interpreter interpreter = new Interpreter();
-        interpreter.Interpret(program);
-
+        Compile(path);
     }
 
     private static string GetFileContent(string root) // método que devuleve el contenido del archivo
@@ -34,5 +24,39 @@ class Program
         string FileContent = reader.ReadToEnd();
         reader.Close();
         return FileContent;
+    }
+
+    private static void CompilationError()
+    {
+        System.Console.WriteLine("Compilation failed, fix all errorr and try again");
+    }
+
+    private static void Compile(string path)
+    {
+        Lexer lexer = new Lexer();
+        List<Token> tokens = lexer.Tokenize(path);
+        if(lexer.hadError)
+        {
+            CompilationError();
+            return;
+        }
+
+        Parser parser = new Parser(tokens);
+        List<IStatement> program = parser.Parse();
+        if(parser.hadError)
+        {
+            CompilationError();
+            return;
+        }
+
+        Interpreter interpreter = new Interpreter();
+        interpreter.Interpret(program);
+        if (interpreter.hadError)
+        {
+            CompilationError();
+            return;
+        }
+        else
+        System.Console.WriteLine("Compilation Succesful");
     }
 }

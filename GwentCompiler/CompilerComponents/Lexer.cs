@@ -4,6 +4,9 @@ public class Lexer : IErrorReporter
     private int row;
     private int current;
     private bool isAtEnd { get { return current >= currentSource?.Length; } }
+
+    public bool hadError { get; set; }
+
     private List<Token> tokens = new();
     private string? source;
     private string? currentSource;
@@ -72,6 +75,7 @@ public class Lexer : IErrorReporter
 
         IErrorReporter.lastRow = newError.ErrorLocation.Row;
         IErrorReporter.lastColumn = newError.ErrorLocation.Column;
+        hadError = true;
     }
 
     public void Report(Error error)

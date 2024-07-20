@@ -33,6 +33,7 @@ public interface IErrorReporter
 {
     protected static int lastColumn {get; set;}
     protected static int lastRow {get; set;}
+    public bool hadError {get; set;}
 
     /// <summary>
     /// Este método genera un nuevo error.
