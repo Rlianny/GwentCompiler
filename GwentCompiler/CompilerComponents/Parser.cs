@@ -271,7 +271,13 @@ public class Parser : IErrorReporter
         {
             IExpression expr = new Variable(Previous());
 
-            while (Check(TokenSubtypes.Dot) || Check(TokenSubtypes.OpenBracket)  || Check(TokenSubtypes.OpenParenthesis))
+            if (Match(new List<TokenSubtypes>() { TokenSubtypes.PostIncrement, TokenSubtypes.PostDecrement }))
+            {
+                Token op = Previous();
+                return new IncrementOrDecrementOperationExpr(op, (Variable)expr);
+            }
+
+            while (Check(TokenSubtypes.Dot) || Check(TokenSubtypes.OpenBracket) || Check(TokenSubtypes.OpenParenthesis))
             {
                 expr = Access(expr);
                 expr = Index(expr);
@@ -296,11 +302,10 @@ public class Parser : IErrorReporter
                 return null;
             }
 
-
             return expr;
         }
 
-        else GenerateError("Expression expected266", Peek().Location); // Si ninguno de los casos coincide, significa que estamos sentados sobre un token que no puede iniciar una expresión
+        else GenerateError("Expression expected", Peek().Location); // Si ninguno de los casos coincide, significa que estamos sentados sobre un token que no puede iniciar una expresión
         throw new Exception();
     }
 
@@ -317,7 +322,7 @@ public class Parser : IErrorReporter
 
             else
             {
-                GenerateError("Expression expected283", Peek().Location);
+                GenerateError("Expression expected", Peek().Location);
                 return null;
             }
         }

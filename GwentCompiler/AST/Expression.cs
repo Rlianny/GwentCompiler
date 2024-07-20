@@ -6,9 +6,9 @@ public interface IExpression : IASTNode
 
 public abstract class BinaryExpression : IExpression
 {
-    public IExpression Left {get; private set;}
-    public IExpression Right {get; private set;}
-    public Token Operator {get; private set;}
+    public IExpression Left { get; private set; }
+    public IExpression Right { get; private set; }
+    public Token Operator { get; private set; }
     public BinaryExpression(IExpression left, Token op, IExpression rigth) : base()
     {
         Left = left;
@@ -19,8 +19,8 @@ public abstract class BinaryExpression : IExpression
 
 public abstract class UnaryExpression : IExpression
 {
-    public IExpression Rigth {get; private set;}
-    public Token Operator {get; private set;}
+    public IExpression Rigth { get; private set; }
+    public Token Operator { get; private set; }
     public UnaryExpression(Token op, IExpression rigth)
     {
         Rigth = rigth;
@@ -30,7 +30,7 @@ public abstract class UnaryExpression : IExpression
 
 public class GroupExpression : IExpression
 {
-    public IExpression Expression {get; private set;}
+    public IExpression Expression { get; private set; }
     public GroupExpression(IExpression expr)
     {
         Expression = expr;
@@ -39,7 +39,7 @@ public class GroupExpression : IExpression
 
 public abstract class Atom : IExpression
 {
-    public Token Value {get; private set;}
+    public Token Value { get; private set; }
     public Atom(Token value)
     {
         Value = value;
@@ -94,7 +94,7 @@ public class BooleanLiteral(Token value) : Atom(value);
 
 public class Variable : IExpression
 {
-    public Token Value {get; private set;}
+    public Token Value { get; private set; }
 
     public Variable(Token value)
     {
@@ -103,9 +103,9 @@ public class Variable : IExpression
 }
 
 public class AssignmentExpr : IExpression
-{   
-    public Variable Name {get; private set;}
-    public IExpression Value {get; private set;}
+{
+    public Variable Name { get; private set; }
+    public IExpression Value { get; private set; }
     public AssignmentExpr(Variable name, IExpression value)
     {
         Name = name;
@@ -113,11 +113,23 @@ public class AssignmentExpr : IExpression
     }
 }
 
+public class IncrementOrDecrementOperationExpr : IExpression
+{
+    public Variable Name {get; private set;}
+    public Token Operation {get; private set;} 
+
+    public IncrementOrDecrementOperationExpr(Token op, Variable rigth)
+    {
+        Operation = op;
+        Name = rigth;
+    }
+}
+
 public class PropertyAccessExpr : IExpression
 {
-    public Token Indexer {get; private set;}
-    public IExpression Value {get; private set;}
-    public IExpression Args {get; private set;}
+    public Token Indexer { get; private set; }
+    public IExpression Value { get; private set; }
+    public IExpression Args { get; private set; }
     public PropertyAccessExpr(IExpression value, IExpression args, Token indexer)
     {
         Value = value;
@@ -128,8 +140,8 @@ public class PropertyAccessExpr : IExpression
 
 public class CallToMethodExpr : IExpression
 {
-    public IExpression Value {get; private set;}
-    public IExpression Args {get; private set;}
+    public IExpression Value { get; private set; }
+    public IExpression Args { get; private set; }
     public CallToMethodExpr(IExpression token, IExpression args)
     {
         Value = token;

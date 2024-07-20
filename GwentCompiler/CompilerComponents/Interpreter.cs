@@ -249,8 +249,22 @@ public class Interpreter : VisitorBase<Object>
         throw new NotImplementedException();
     }
 
+    public object Visit(IncrementOrDecrementOperationExpr expr)
+    {
+        var value = environment.Get(expr.Name.Value);
+
+        if (value is int valueInt)
+        {
+            if (expr.Operation.Subtype == TokenSubtypes.PostDecrement) valueInt--;
+            else valueInt++;
+            environment.Assign(expr.Name.Value.Lexeme, valueInt);
+            return valueInt;
+        }
+        else throw new RuntimeError("The operand must to be a number", expr.Operation.Location);
+    }
+
     #endregion
-    #region Visitor Statements
+    #region StatementsVisitor;
 
     public object? Visit(ExpressionStmt expressionStatement)
     {

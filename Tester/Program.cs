@@ -25,6 +25,7 @@ class Program
 
         Interpreter interpreter = new Interpreter();
         interpreter.Interpret(program);
+
     }
 
     private static string GetFileContent(string root) // método que devuleve el contenido del archivo
@@ -32,7 +33,6 @@ class Program
         StreamReader reader = new StreamReader(root); // leemos el contenido del archivo
         string FileContent = reader.ReadToEnd();
         reader.Close();
-
         return FileContent;
     }
 }
