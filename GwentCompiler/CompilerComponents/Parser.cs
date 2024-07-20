@@ -94,7 +94,7 @@ public class Parser : IErrorReporter
                     break;
 
                 case TokenSubtypes.Inequality:
-                    expr = new UnequalityExpr(expr, op, rigth);
+                    expr = new InequalityExpr(expr, op, rigth);
                     break;
             }
         }
@@ -179,7 +179,7 @@ public class Parser : IErrorReporter
                     break;
 
                 case TokenSubtypes.Subtraction:
-                    expr = new SubtractionExpr(expr, op, rigth);
+                    expr = new SubstractionExpr(expr, op, rigth);
                     break;
             }
         }

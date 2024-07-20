@@ -9,3 +9,4 @@
 /home/lianny/$/home/lianny/Proyecto/ProyectoGwent++/Compiler/GwentCompiler/obj/Debug/net8.0/refint/GwentCompiler.dll
 /home/lianny/$/home/lianny/Proyecto/ProyectoGwent++/Compiler/GwentCompiler/obj/Debug/net8.0/GwentCompiler.pdb
 /home/lianny/$/home/lianny/Proyecto/ProyectoGwent++/Compiler/GwentCompiler/obj/Debug/net8.0/ref/GwentCompiler.dll
+/home/lianny/$/home/lianny/Proyecto/ProyectoGwent++/Compiler/GwentCompiler/obj/Debug/net8.0/GwentCompiler.sourcelink.json

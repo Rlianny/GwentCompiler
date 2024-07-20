@@ -1,8 +1,8 @@
 namespace GwentCompiler;
 
-public interface IStatement
+public interface IStatement : IASTNode
 {
-    public VoidType Accept(IStmtVisitor<VoidType> visitor);
+   
 }
 
 public class ExpressionStmt : IStatement
@@ -12,11 +12,6 @@ public class ExpressionStmt : IStatement
     public ExpressionStmt(IExpression expression)
     {
         Expression = expression;
-    }
-
-    public VoidType Accept(IStmtVisitor<VoidType> visitor)
-    {
-        return visitor.VisitExpressionStmt(this);
     }
 }
 
@@ -28,11 +23,6 @@ public class PrintStmt : IStatement
     {
         Expression = expression;
     }
-
-    public VoidType Accept(IStmtVisitor<VoidType> visitor)
-    {
-        return visitor.VisitPrintStmt(this);
-    }
 }
 
 public class BlockStmt : IStatement
@@ -41,11 +31,6 @@ public class BlockStmt : IStatement
     public BlockStmt(List<IStatement> statements)
     {
         Statements = statements;
-    }
-
-    public VoidType Accept(IStmtVisitor<VoidType> visitor)
-    {
-        return visitor.VisitBlockStmt(this);
     }
 }
 
@@ -61,11 +46,6 @@ public class IfStmt : IStatement
         ThenBranch = thenBranch;
         ElseBranch = elseBranch;
     }
-
-    public VoidType Accept(IStmtVisitor<VoidType> visitor)
-    {
-        return visitor.VisitIfStmt(this);
-    }
 }
 
 public class WhileStmt : IStatement
@@ -77,11 +57,6 @@ public class WhileStmt : IStatement
     {
         Condition = condition;
         Body = body;
-    }
-
-    public VoidType Accept(IStmtVisitor<VoidType> visitor)
-    {
-        return visitor.VisitWhileStmt(this);
     }
 }
 

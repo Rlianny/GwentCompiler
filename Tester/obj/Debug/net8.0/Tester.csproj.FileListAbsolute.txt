@@ -16,3 +16,4 @@
 /home/lianny/$/home/lianny/Proyecto/ProyectoGwent++/Compiler/Tester/obj/Debug/net8.0/Tester.pdb
 /home/lianny/$/home/lianny/Proyecto/ProyectoGwent++/Compiler/Tester/obj/Debug/net8.0/Tester.genruntimeconfig.cache
 /home/lianny/$/home/lianny/Proyecto/ProyectoGwent++/Compiler/Tester/obj/Debug/net8.0/ref/Tester.dll
+/home/lianny/$/home/lianny/Proyecto/ProyectoGwent++/Compiler/Tester/obj/Debug/net8.0/Tester.sourcelink.json
