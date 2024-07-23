@@ -23,7 +23,7 @@ public abstract class VisitorBase<TResult> : IVisitor<TResult>, IErrorReporter
     /// <param name="node">The expression to visit.</param>
     /// <param name="additionalParams">Additional parameters to pass to the Visit method.</param>
     /// <returns>The result of the Visit method or null if no matching method is found.</returns>
-    public virtual TResult? VisitBase(IASTNode node, params object[] additionalParams)
+    public virtual TResult? VisitBase(IASTNode? node, params object[] additionalParams)
     {
         // Combine the expression type with the types of additional parameters
         var parameterTypes = new[] { node.GetType() }
@@ -43,6 +43,7 @@ public abstract class VisitorBase<TResult> : IVisitor<TResult>, IErrorReporter
             }
             catch (System.Reflection.TargetInvocationException ex)
             {
+                hadError = true;
                 if (ex.InnerException is RuntimeError runtimeError)
                     throw runtimeError; // Reenvía la excepción para manejarla en un nivel superior
                 else

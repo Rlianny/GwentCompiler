@@ -1,4 +1,11 @@
+card
 {
-    i = 9 + 3;
-    print i++;
+    Type: "Oro",
+    Name: "Ke" @ "v" @ "in",
+    Faction: "Chama",
+    Power: 10 - 4 * 5 + 30,
+    EffectDescription: "Enamorar a Lianny mucho mucho",
+    CharacterDescription: "Amor de la vida de Lianny, inteligente y lindoooo",
+    Quote: "Esto es un p***gón",
+    EffectDescription: "uwu",
 }

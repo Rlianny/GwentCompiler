@@ -42,21 +42,38 @@ static class Program
         }
 
         Parser parser = new Parser(tokens);
-        List<IStatement> program = parser.Parse();
+        //List<IStatement> program = parser.Parse();
+        List<IProgramNode> program = parser.Program();
         if(parser.hadError)
         {
             CompilationError();
             return;
         }
 
-        Interpreter interpreter = new Interpreter();
-        interpreter.Interpret(program);
-        if (interpreter.hadError)
+        //Interpreter interpreter = new Interpreter();
+        // interpreter.Interpret(program);
+        // if (interpreter.hadError)
+        // {
+        //     CompilationError();
+        //     return;
+        // }
+
+        ObjectCompiller objectCompiller = new ObjectCompiller(program);
+        List<CompiledObject> compiledObjects = objectCompiller.CompileObjects();
+        foreach(var obj in compiledObjects)
         {
-            CompilationError();
-            return;
+            if(obj is CompiledCard compiledCard)
+            {
+                System.Console.WriteLine(compiledCard.ToString());
+            }
         }
-        else
-        System.Console.WriteLine("Compilation Succesful");
+        
+        
     }
 }
+
+
+// pendientes:
+
+// el evaluador de cardComponent señala el error en la posicion errónea, guardar como token el :
+//

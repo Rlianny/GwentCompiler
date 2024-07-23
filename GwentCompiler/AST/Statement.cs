@@ -7,9 +7,9 @@ public interface IStatement : IASTNode
 
 public class ExpressionStmt : IStatement
 {
-    public IExpression Expression;
+    public IExpression? Expression {get; private set;}
 
-    public ExpressionStmt(IExpression expression)
+    public ExpressionStmt(IExpression? expression)
     {
         Expression = expression;
     }
@@ -17,9 +17,9 @@ public class ExpressionStmt : IStatement
 
 public class PrintStmt : IStatement
 {
-    public IExpression Expression;
+    public IExpression? Expression {get; private set;}
 
-    public PrintStmt(IExpression expression)
+    public PrintStmt(IExpression? expression)
     {
         Expression = expression;
     }
@@ -27,8 +27,8 @@ public class PrintStmt : IStatement
 
 public class BlockStmt : IStatement
 {
-    public List<IStatement> Statements;
-    public BlockStmt(List<IStatement> statements)
+    public List<IStatement?> Statements {get; private set;}
+    public BlockStmt(List<IStatement?> statements)
     {
         Statements = statements;
     }
@@ -36,11 +36,11 @@ public class BlockStmt : IStatement
 
 public class IfStmt : IStatement
 {
-    public IExpression Condition;
-    public IStatement ThenBranch;
-    public IStatement ElseBranch;
+    public IExpression? Condition {get; private set;}
+    public IStatement? ThenBranch {get; private set;}
+    public IStatement? ElseBranch {get; private set;}
 
-    public IfStmt(IExpression condition, IStatement thenBranch, IStatement elseBranch)
+    public IfStmt(IExpression? condition, IStatement? thenBranch, IStatement? elseBranch)
     {
         Condition = condition;
         ThenBranch = thenBranch;
@@ -50,12 +50,26 @@ public class IfStmt : IStatement
 
 public class WhileStmt : IStatement
 {
-    public IExpression Condition;
-    public IStatement Body;
+    public IExpression? Condition {get; private set;}
+    public IStatement? Body {get; private set;}
 
-    public WhileStmt(IExpression condition, IStatement body)
+    public WhileStmt(IExpression? condition, IStatement? body)
     {
         Condition = condition;
+        Body = body;
+    }
+}
+
+public class ForStmt : IStatement
+{
+    public Variable? Variable {get; private set;}
+    public IExpression? Collection {get; private set;}
+    public List<IStatement?>? Body {get; private set;}
+
+    public ForStmt(Variable? variable, IExpression? collection, List<IStatement?>? body)
+    {
+        Variable = variable;
+        Collection = collection;
         Body = body;
     }
 }

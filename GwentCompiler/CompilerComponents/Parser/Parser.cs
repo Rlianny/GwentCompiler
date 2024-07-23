@@ -1,0 +1,53 @@
+using System.Data;
+using System.Linq.Expressions;
+
+namespace GwentCompiler;
+
+public partial class Parser : IErrorReporter
+{
+    private List<Token> tokens = new();
+    private int current;
+    public bool hadError { get; set; }
+
+    public Parser(List<Token> tokens)
+    {
+        this.tokens = tokens;
+        current = 0;
+    }
+
+    public List<IStatement?> Parse()
+    {
+        List<IStatement?> statements = new();
+        while (!IsAtEnd())
+        {
+            statements.Add(Statement());
+        }
+        return statements;
+    }
+
+    public List<IProgramNode> Program()
+    {
+        List<IProgramNode> programNodes = new();
+
+        while(!IsAtEnd())
+        {
+            if(Match(TokenSubtypes.card))
+            {
+                programNodes.Add(Card());
+                continue;
+            }
+
+            if(Match(TokenSubtypes.effect))
+            {
+                programNodes.Add(Effect());
+                continue;
+            }
+
+            GenerateError("Invalid declaration type, expect card or effect", Peek().Location);
+            break;
+        }
+
+        return programNodes;
+    }
+
+}
