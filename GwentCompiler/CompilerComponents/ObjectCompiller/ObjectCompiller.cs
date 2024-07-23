@@ -2,8 +2,8 @@ namespace GwentCompiler;
 
 public partial class ObjectCompiller : VisitorBase<object>
 {
-    private List<IProgramNode> nodes;
-    public ObjectCompiller(List<IProgramNode> nodes)
+    private List<IProgramNode?> nodes;
+    public ObjectCompiller(List<IProgramNode?> nodes)
     {
         this.nodes = nodes;
     }  

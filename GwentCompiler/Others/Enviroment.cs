@@ -38,6 +38,7 @@ public class Environment
         if (values.ContainsKey(name.Lexeme)) return values[name.Lexeme];
         if (Enclosing != null) return Enclosing.Get(name);
         else throw new RuntimeError($"Not defined variable {name}", name.Location);
+
     }
 
 }

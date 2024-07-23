@@ -6,9 +6,9 @@ public partial class Interpreter : VisitorBase<Object>
     {
         var value = Evaluate(declaration.Value);
 
-        if(value is string stringType)
+        if (value is string stringType)
         {
-            if(stringType == "Oro" || stringType == "Plata" || stringType == "Líder") return value;
+            if (stringType == "Oro" || stringType == "Plata" || stringType == "Líder") return value;
             else
             {
                 throw new RuntimeError("Invalid type declaration, only the following types are accepted: 'Oro', 'Plata', 'Líder'", declaration.Operator.Location);
@@ -25,7 +25,7 @@ public partial class Interpreter : VisitorBase<Object>
     {
         var value = Evaluate(declaration.Value);
 
-        if(value != null && value is string stringName)
+        if (value != null && value is string stringName)
         {
             return "Morty " + stringName;
         }
@@ -39,7 +39,7 @@ public partial class Interpreter : VisitorBase<Object>
     {
         var value = Evaluate(declaration.Value);
 
-        if(value is string stringFaction)
+        if (value is string stringFaction)
         {
             return stringFaction;
         }
@@ -53,9 +53,12 @@ public partial class Interpreter : VisitorBase<Object>
     {
         var value = Evaluate(declaration.Value);
 
-        if(value is int intPower)
+        if (value is int intPower)
         {
-            return intPower;
+            if (intPower > 0)
+                return intPower;
+                
+            else throw new RuntimeError("The power must to be a positive integer value", declaration.Operator.Location);
         }
         else
         {
@@ -67,7 +70,7 @@ public partial class Interpreter : VisitorBase<Object>
     {
         var value = Evaluate(declaration.Value);
 
-        if(value is string stringValue)
+        if (value is string stringValue)
         {
             return stringValue;
         }
@@ -81,7 +84,7 @@ public partial class Interpreter : VisitorBase<Object>
     {
         var value = Evaluate(declaration.Value);
 
-        if(value is string stringValue)
+        if (value is string stringValue)
         {
             return stringValue;
         }
@@ -95,7 +98,7 @@ public partial class Interpreter : VisitorBase<Object>
     {
         var value = Evaluate(declaration.Value);
 
-        if(value is string stringValue)
+        if (value is string stringValue)
         {
             return stringValue;
         }

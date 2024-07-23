@@ -25,6 +25,8 @@ public abstract class VisitorBase<TResult> : IVisitor<TResult>, IErrorReporter
     /// <returns>The result of the Visit method or null if no matching method is found.</returns>
     public virtual TResult? VisitBase(IASTNode? node, params object[] additionalParams)
     {
+        if(node == null) return default;
+        
         // Combine the expression type with the types of additional parameters
         var parameterTypes = new[] { node.GetType() }
             .Concat(additionalParams.Select(p => p.GetType()))

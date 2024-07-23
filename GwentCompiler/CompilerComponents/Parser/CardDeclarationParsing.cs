@@ -88,11 +88,11 @@ public partial class Parser
             if (Match(TokenSubtypes.OnActivation))
             {
                 CardComponent? value = OnActivation();
-                // if (value == null)
-                // {
-                //     GenerateError("The card must to declare a OnActivation field", Previous().Location);
-                //     return null;
-                // }
+                if (value == null)
+                {
+                    GenerateError("The card must to declare a OnActivation field", Previous().Location);
+                    return null;
+                }
                 if (!parsedCard.SetComponent(value))
                 {
                     GenerateError("The card OnActivation field has been defined before", Previous().Location);

@@ -3,10 +3,6 @@ using System.Runtime.InteropServices;
 
 namespace GwentCompiler;
 
-// A la hora de usar la interface IVisitor en los Statements el tipo de retorno debería ser void, pero C# no me permite
-// pasar void como tipo. La mejor sugerencia de Phind fue declararme un struct que representara el void, y lo nombré VoidType;
-// ¿Hay alguna manera más elegante de hacerlo? No me gusta demasiado.
-
 public partial class Interpreter : VisitorBase<Object>
 {
     private Environment environment = new Environment();
@@ -41,12 +37,12 @@ public partial class Interpreter : VisitorBase<Object>
         return null;
     }
 
-    private Object? Evaluate(IExpression expression)
+    private Object? Evaluate(IExpression? expression)
     {
         return VisitBase(expression);
     }
 
-    private void Execute(IStatement statement)
+    private void Execute(IStatement? statement)
     {
         VisitBase(statement);
     }
@@ -74,15 +70,21 @@ public partial class Interpreter : VisitorBase<Object>
     private string Stringify(Object? obj)
     {
         if (obj == null) return "null";
+
         string? text = obj.ToString();
+        if (text == null) return "null";
+
         if (text.EndsWith(".0")) text = text[..(text.Length - 2)];
+
         if (text[0] == '"' && text[text.Length - 1] == '"') text = text[1..(text.Length - 1)];
+
         return text;
     }
 
     private bool IsTruthy(Object? obj)
     {
         if (obj == null) return false;
+
         if (bool.TryParse(obj.ToString(), out bool value)) return value;
         return true;
     }

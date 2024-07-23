@@ -11,8 +11,6 @@ public class CardDeclaration : IProgramNode
     public CardCharacterDescriptionDeclaration? CharacterDescription { get; private set; }
     public CardQuoteDeclaration? Quote { get; private set; }
 
-    public CardDeclaration() { }
-
     public bool SetComponent(CardComponent component)
     {
         switch (component.GetType().Name)
@@ -24,7 +22,7 @@ public class CardDeclaration : IProgramNode
                     Type = (CardTypeDeclaration)component;
                     return true;
                 }
-                break;
+                return false;
 
             case "CardNameDeclaration":
 
@@ -33,7 +31,7 @@ public class CardDeclaration : IProgramNode
                     Name = (CardNameDeclaration)component;
                     return true;
                 }
-                break;
+                return false;
 
             case "CardFactionDeclaration":
 
@@ -42,7 +40,7 @@ public class CardDeclaration : IProgramNode
                     Faction = (CardFactionDeclaration)component;
                     return true;
                 }
-                break;
+                return false;
 
             case "CardRangeDeclaration":
 
@@ -51,7 +49,7 @@ public class CardDeclaration : IProgramNode
                     Range = (CardRangeDeclaration)component;
                     return true;
                 }
-                break;
+                return false;
 
             case "CardPowerDeclaration":
 
@@ -60,7 +58,7 @@ public class CardDeclaration : IProgramNode
                     Power = (CardPowerDeclaration)component;
                     return true;
                 }
-                break;
+                return false;
 
             case "CardEffectDescriptionDeclaration":
 
@@ -69,7 +67,7 @@ public class CardDeclaration : IProgramNode
                     EffectDescription = (CardEffectDescriptionDeclaration)component;
                     return true;
                 }
-                break;
+                return false;
 
             case "OnActivation":
 
@@ -78,7 +76,7 @@ public class CardDeclaration : IProgramNode
                     OnActivationField = (OnActivation)component;
                     return true;
                 }
-                break;
+                return false;
 
             case "CardCharacterDescriptionDeclaration":
 
@@ -87,7 +85,7 @@ public class CardDeclaration : IProgramNode
                     CharacterDescription = (CardCharacterDescriptionDeclaration)component;
                     return true;
                 }
-                break;
+                return false;
 
             case "CardQuoteDeclaration":
 
@@ -96,7 +94,7 @@ public class CardDeclaration : IProgramNode
                     Quote = (CardQuoteDeclaration)component;
                     return true;
                 }
-                break;
+                return false;
 
         }
         return false;
@@ -104,7 +102,6 @@ public class CardDeclaration : IProgramNode
 }
 
 public abstract class CardComponent : IASTNode;
-
 public abstract class StringFieldComponent : CardComponent
 {
     public Token Operator {get; private set;}
@@ -115,28 +112,20 @@ public abstract class StringFieldComponent : CardComponent
         Operator = @operator;
     }
 }
-
 public class CardTypeDeclaration(IExpression value, Token @operator) : StringFieldComponent(value, @operator);
-
 public class CardNameDeclaration(IExpression value, Token @operator) : StringFieldComponent(value, @operator);
-
 public class CardFactionDeclaration(IExpression value, Token @operator) : StringFieldComponent(value, @operator);
-
 public class CardRangeDeclaration : CardComponent
 {
-    public List<IExpression> Ranges {get; private set;}
+    public List<IExpression?> Ranges {get; private set;}
 
-    public CardRangeDeclaration(List<IExpression> value)
+    public CardRangeDeclaration(List<IExpression?> value)
     {
         Ranges = value;
     }
 }
-
 public class CardPowerDeclaration(IExpression value, Token @operator) : StringFieldComponent(value, @operator);
-
 public class CardEffectDescriptionDeclaration(IExpression value, Token @operator) : StringFieldComponent(value, @operator);
-
 public class CardCharacterDescriptionDeclaration(IExpression value, Token @operator) : StringFieldComponent(value, @operator);
-
 public class CardQuoteDeclaration(IExpression value, Token @operator) : StringFieldComponent(value, @operator);
 public class OnActivation : CardComponent;

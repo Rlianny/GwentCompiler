@@ -25,9 +25,9 @@ public partial class Parser : IErrorReporter
         return statements;
     }
 
-    public List<IProgramNode> Program()
+    public List<IProgramNode?> Program()
     {
-        List<IProgramNode> programNodes = new();
+        List<IProgramNode?> programNodes = new();
 
         while(!IsAtEnd())
         {

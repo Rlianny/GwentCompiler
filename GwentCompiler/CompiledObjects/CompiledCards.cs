@@ -1,7 +1,5 @@
 namespace GwentCompiler;
 
-public abstract class CompiledObject;
-
 [Serializable]
 public class CompiledCard : CompiledObject
 {

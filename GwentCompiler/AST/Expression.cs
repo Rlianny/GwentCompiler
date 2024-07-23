@@ -116,9 +116,9 @@ public class AssignmentExpr : IExpression
 public class IncrementOrDecrementOperationExpr : IExpression
 {
     public Variable? Name {get; private set;}
-    public Token? Operation {get; private set;} 
+    public Token Operation {get; private set;} 
 
-    public IncrementOrDecrementOperationExpr(Token? op, Variable? rigth)
+    public IncrementOrDecrementOperationExpr(Token op, Variable? rigth)
     {
         Operation = op;
         Name = rigth;
