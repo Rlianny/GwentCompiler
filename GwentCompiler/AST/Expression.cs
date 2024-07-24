@@ -125,26 +125,56 @@ public class IncrementOrDecrementOperationExpr : IExpression
     }
 }
 
-public class PropertyAccessExpr : IExpression
+public abstract class ContextAccessExpr : IExpression
 {
-    public Token Indexer { get; private set; }
-    public IExpression? Value { get; private set; }
-    public IExpression? Args { get; private set; }
-    public PropertyAccessExpr(IExpression? value, IExpression? args, Token indexer)
+    public Token Dot { get; private set; }
+    public Variable Variable { get; private set; }
+    public Token Acces { get; private set;}
+    public IExpression? Args{get; private set;}
+    public ContextAccessExpr(Variable variable, Token dot, Token acces, IExpression? args)
     {
-        Value = value;
+        Variable = variable;
+        Dot = dot;
+        Acces = acces;
         Args = args;
-        Indexer = indexer;
     }
 }
 
-public class CallToMethodExpr : IExpression
+public class TriggerPlayerAccessExpr(Variable variable, Token dot, Token acces, IExpression? args) : ContextAccessExpr(variable, dot, acces, args);
+
+public class BoardAccessExpr(Variable variable, Token dot, Token acces, IExpression? args) : ContextAccessExpr(variable, dot, acces, args);
+
+public class HandOfPlayerAccessExpr(Variable variable, Token dot, Token acces, IExpression? args) : ContextAccessExpr(variable, dot, acces, args);
+
+public class FieldOfPlayerAccessExpr(Variable variable, Token dot, Token acces, IExpression? args) : ContextAccessExpr(variable, dot, acces, args);
+
+public class GraveyardOfPlayerAccessExpr(Variable variable, Token dot, Token acces, IExpression? args) : ContextAccessExpr(variable, dot, acces, args);
+
+public class DeckOfPlayerAccessExpr(Variable variable, Token dot, Token acces, IExpression? args) : ContextAccessExpr(variable, dot, acces, args);
+
+public class CardOwnerAccessExpr(Variable variable, Token dot, Token acces, IExpression? args) : ContextAccessExpr(variable, dot, acces, args);
+
+public class ContextMethodsExpr : IExpression
 {
-    public IExpression? Value { get; private set; }
-    public IExpression? Args { get; private set; }
-    public CallToMethodExpr(IExpression? token, IExpression? args)
+    public IExpression? AccessExpression { get; private set; }
+    public Token Method { get; private set; }
+    public IExpression? Args{get; private set;}
+    public ContextMethodsExpr(IExpression? contextAccessExpr, Token method, IExpression? args)
     {
-        Value = token;
+        AccessExpression = contextAccessExpr;
+        Method = method;
         Args = args;
     }
 }
+
+public class FindMethodExpr(IExpression? acces, Token method, IExpression? args) : ContextMethodsExpr(acces, method, args);
+
+public class PushMethodExpr(IExpression? acces, Token method, IExpression? args) : ContextMethodsExpr(acces, method, args);
+
+public class SendBottomMethodExpr(IExpression? acces, Token method, IExpression? args) : ContextMethodsExpr(acces, method, args);
+
+public class PopMethodExpr(IExpression? acces, Token method, IExpression? args) : ContextMethodsExpr(acces, method, args);
+
+public class RemoveMethodExpr(IExpression? acces, Token method, IExpression? args) : ContextMethodsExpr(acces, method, args);
+
+public class ShuffleMethodExpr(IExpression? acces, Token method, IExpression? args) : ContextMethodsExpr(acces, method, args);

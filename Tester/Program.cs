@@ -42,31 +42,32 @@ static class Program
         }
 
         Parser parser = new Parser(tokens);
-        //List<IStatement> program = parser.Parse();
-        List<IProgramNode?> program = parser.Program();
-        if(parser.hadError)
-        {
-            CompilationError();
-            return;
-        }
-
-        //Interpreter interpreter = new Interpreter();
-        // interpreter.Interpret(program);
-        // if (interpreter.hadError)
+        List<IStatement> program = parser.Parse();
+        // List<IProgramNode?> program = parser.Program();
+        // if(parser.hadError)
         // {
         //     CompilationError();
         //     return;
         // }
 
-        ObjectCompiller objectCompiller = new ObjectCompiller(program);
-        List<CompiledObject> compiledObjects = objectCompiller.CompileObjects();
-        foreach(var obj in compiledObjects)
+        return;
+        Interpreter interpreter = new Interpreter();
+        interpreter.Interpret(program);
+        if (interpreter.hadError)
         {
-            if(obj is CompiledCard compiledCard)
-            {
-                System.Console.WriteLine(compiledCard.ToString());
-            }
+            CompilationError();
+            return;
         }
+
+        // ObjectCompiller objectCompiller = new ObjectCompiller(program);
+        // List<CompiledObject> compiledObjects = objectCompiller.CompileObjects();
+        // foreach(var obj in compiledObjects)
+        // {
+        //     if(obj is CompiledCard compiledCard)
+        //     {
+        //         System.Console.WriteLine(compiledCard.ToString());
+        //     }
+        // }
         
         
     }

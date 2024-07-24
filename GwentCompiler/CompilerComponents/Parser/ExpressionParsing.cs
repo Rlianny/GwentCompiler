@@ -247,63 +247,85 @@ public partial class Parser
 
         if (Match(TokenSubtypes.Identifier))
         {
-            IExpression? expr = new Variable(Previous());
+            Variable var = new Variable(Previous());
 
             if (Match(new List<TokenSubtypes>() { TokenSubtypes.PostIncrement, TokenSubtypes.PostDecrement }))
             {
                 Token op = Previous();
-                return new IncrementOrDecrementOperationExpr(op, (Variable)expr);
+                return new IncrementOrDecrementOperationExpr(op, var);
             }
 
-            while (Check(TokenSubtypes.Dot) || Check(TokenSubtypes.OpenBracket) || Check(TokenSubtypes.OpenParenthesis))
+            if (Match(TokenSubtypes.Dot))
             {
-                expr = Access(expr);
-                expr = Index(expr);
+                Token dot = Previous();
 
-                if (Match(TokenSubtypes.OpenParenthesis))
+                if (Match(new List<TokenSubtypes>() { TokenSubtypes.TriggerPlayer, TokenSubtypes.Board, TokenSubtypes.HandOfPlayer, TokenSubtypes.FieldOfPlayer, TokenSubtypes.GraveyardOfPlayer, TokenSubtypes.DeckOfPlayer, TokenSubtypes.Owner }))
                 {
+                    Token acces = Previous();
                     IExpression? args = null;
 
-                    if (!Check(TokenSubtypes.CloseParenthesis)) args = Expression();
-                    Token? close = Consume(TokenSubtypes.CloseParenthesis, ") expected after expression.");
 
-                    if (close == null) return null;
+                    if (acces.Subtype == TokenSubtypes.HandOfPlayer || acces.Subtype == TokenSubtypes.FieldOfPlayer || acces.Subtype == TokenSubtypes.GraveyardOfPlayer || acces.Subtype == TokenSubtypes.DeckOfPlayer)
+                    {
+                        if (Match(TokenSubtypes.OpenParenthesis))
+                        {
+                            args = Expression();
+                            Consume(TokenSubtypes.CloseParenthesis, "Expect ')' after methods arguments");
+                        }
+                    }
 
-                    expr = new CallToMethodExpr(expr, args);
+                    ContextAccessExpr? expr = null;
+
+                    switch (acces.Subtype)
+                    {
+                        case TokenSubtypes.TriggerPlayer:
+                            expr = new TriggerPlayerAccessExpr(var, dot, acces, args);
+                            break;
+
+                        case TokenSubtypes.Board:
+                            expr = new BoardAccessExpr(var, dot, acces, args);
+                            break;
+
+                        case TokenSubtypes.HandOfPlayer:
+                            expr = new HandOfPlayerAccessExpr(var, dot, acces, args);
+                            break;
+
+                        case TokenSubtypes.FieldOfPlayer:
+                            expr = new FieldOfPlayerAccessExpr(var, dot, acces, args);
+                            break;
+
+                        case TokenSubtypes.GraveyardOfPlayer:
+                            expr = new GraveyardOfPlayerAccessExpr(var, dot, acces, args);
+                            break;
+
+                        case TokenSubtypes.DeckOfPlayer:
+                            expr = new DeckOfPlayerAccessExpr(var, dot, acces, args);
+                            break;
+
+                        case TokenSubtypes.Owner:
+                            expr = new CardOwnerAccessExpr(var, dot, acces, args);
+                            break;
+                    }
+
+                    if (Match(TokenSubtypes.Dot))
+                    {
+                        return MethodCall(expr);
+                    }
+
+                    return expr;
                 }
 
             }
 
-            if (Check(TokenSubtypes.Dot))
-            {
-                GenerateError("Invalid Access", Peek().Location);
-                return null;
-            }
-
-            return expr;
+            return var;
         }
 
         else GenerateError("Expression expected", Peek().Location); // Si ninguno de los casos coincide, significa que estamos sentados sobre un token que no puede iniciar una expresión
         return null;
     }
 
-    private IExpression? Access(IExpression? left)
+    private IExpression? MethodCall(IExpression? access)
     {
-        while (Match(TokenSubtypes.Dot))
-        {
-            Token dot = Previous();
-
-            if (Match(TokenSubtypes.Identifier))
-            {
-                return new PropertyAccessExpr(left, new Variable(Previous()), dot);
-            }
-
-            else
-            {
-                GenerateError("Expression expected", Peek().Location);
-                return null;
-            }
-        }
 
         if (Check(TokenSubtypes.Dot))
         {
@@ -311,23 +333,60 @@ public partial class Parser
             return null;
         }
 
-        return left;
-    }
-
-    private IExpression? Index(IExpression? left)
-    {
-
-        while (Match(TokenSubtypes.OpenBracket))
+        if (Match(TokenSubtypes.Find))
         {
-            Token indexToken = Previous();
-            IExpression? expr = Expression();
-            Token? close = Consume(TokenSubtypes.CloseBracket, "] expected at index expression.");
-            if (close == null) return null;
-
-            left = new PropertyAccessExpr(left, expr, indexToken);
+            Token method = Previous();
+            Consume(TokenSubtypes.OpenParenthesis, "Expected '('");
+            IExpression? args = Expression();
+            Consume(TokenSubtypes.CloseParenthesis, "Expected ')'");
+            return new FindMethodExpr(access, method, args);
         }
 
-        return left;
+        if (Match(TokenSubtypes.Push))
+        {
+            Token method = Previous();
+            Consume(TokenSubtypes.OpenParenthesis, "Expected '('");
+            IExpression? args = Expression();
+            Consume(TokenSubtypes.CloseParenthesis, "Expected ')'");
+            return new PushMethodExpr(access, method, args);
+        }
+
+        if (Match(TokenSubtypes.SendBottom))
+        {
+            Token method = Previous();
+            Consume(TokenSubtypes.OpenParenthesis, "Expected '('");
+            IExpression? args = Expression();
+            Consume(TokenSubtypes.CloseParenthesis, "Expected ')'");
+            return new SendBottomMethodExpr(access, method, args);
+        }
+
+        if (Match(TokenSubtypes.Pop))
+        {
+            Token method = Previous();
+            Consume(TokenSubtypes.OpenParenthesis, "Expected '('");
+            Consume(TokenSubtypes.CloseParenthesis, "Expected ')'");
+            return new PopMethodExpr(access, method, null);
+        }
+
+        if (Match(TokenSubtypes.Remove))
+        {
+            Token method = Previous();
+            Consume(TokenSubtypes.OpenParenthesis, "Expected '('");
+            IExpression? args = Expression();
+            Consume(TokenSubtypes.CloseParenthesis, "Expected ')'");
+            return new RemoveMethodExpr(access, method, args);
+        }
+
+        if (Match(TokenSubtypes.Shuffle))
+        {
+            Token method = Previous();
+            Consume(TokenSubtypes.OpenParenthesis, "Expected '('");
+            Consume(TokenSubtypes.CloseParenthesis, "Expected ')'");
+            return new ShuffleMethodExpr(access, method, null);
+        }
+
+        else GenerateError("Expression expected", Peek().Location);
+        return null;
     }
 
     #endregion

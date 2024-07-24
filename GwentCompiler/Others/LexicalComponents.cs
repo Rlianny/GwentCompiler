@@ -20,7 +20,7 @@ namespace GwentCompiler
     public enum TokenSubtypes
     {
         Comma, OpenParenthesis, CloseParenthesis, OpenBracket, CloseBracket, OpenBrace, CloseBrace, Colon, Semicolon, Lambda, Dot,
-        effect, card, Name, While, For, String, Number, Bool, Params, Action, Type, Faction, Power, Range, OnActivation, Effect, Selector, Source, Single, Predicate, PostAction, If, Else, EffectDescription, CharacterDescription, Quote,
+        effect, card, Name, While, For, String, Number, Bool, Params, Action, Type, Faction, Power, Range, OnActivation, Effect, Selector, Source, Single, Predicate, PostAction, If, Else, EffectDescription, CharacterDescription, Quote, TriggerPlayer, Board, HandOfPlayer, FieldOfPlayer, GraveyardOfPlayer, DeckOfPlayer, Owner, Find, Push, SendBottom, Pop, Remove, Shuffle,
         Negation, True, False, NumericLiteral, StringLiteral, Identifier, Comments, WhiteSpaces,
         Addition, Subtraction, Multiplication, Division, Potentiation, Equality, Inequality, AND, OR, GreaterThanOrEqual, LessThanOrEqual, GreaterThan, LessThan, In, PostIncrement, PostDecrement, StringConcatenation, StringConcatenationSpaced, Assignment,
         EOF,
@@ -32,7 +32,7 @@ namespace GwentCompiler
         public static Dictionary<TokenTypes, Regex> tokenRegexPatterns = new()
     {
         { TokenTypes.Punctuation, new Regex("^\\,|^\\(|^\\)|^\\[|^\\]|^\\{|^\\}|^\\:|^\\;|^\\=>|^\\.") },
-        { TokenTypes.Keyword, new Regex("^effect$?(?![a-zA-Z0-9])|^card$?(?![a-zA-Z0-9])|^Name$?(?![a-zA-Z0-9])|^while$?(?![a-zA-Z0-9])|^for$?(?![a-zA-Z0-9])|^String$?(?![a-zA-Z0-9])|^Params$?(?![a-zA-Z0-9])|^Number$?(?![a-zA-Z0-9])|^Bool$?(?![a-zA-Z0-9])|^Action$?|^Type$?(?![a-zA-Z0-9])|^Faction$?(?![a-zA-Z0-9])|^Power$?(?![a-zA-Z0-9])|^Range$?(?![a-zA-Z0-9])|^OnActivation$?(?![a-zA-Z0-9])|^Effect$?(?![a-zA-Z0-9])|^Selector$?(?![a-zA-Z0-9])|^Source$?(?![a-zA-Z0-9])|^Single$?(?![a-zA-Z0-9])|^Predicate$?(?![a-zA-Z0-9])|^PostAction$(?![a-zA-Z0-9])|^print$?(?![a-zA-Z0-9])|^if$?(?![a-zA-Z0-9])|^else$?(?![a-zA-Z0-9])|^CharacterDescription$?(?![a-zA-Z0-9])|^EffectDescription$?(?![a-zA-Z0-9])|^Quote$?(?![a-zA-Z0-9])") },
+        { TokenTypes.Keyword, new Regex("^effect$?(?![a-zA-Z0-9])|^card$?(?![a-zA-Z0-9])|^Name$?(?![a-zA-Z0-9])|^while$?(?![a-zA-Z0-9])|^for$?(?![a-zA-Z0-9])|^String$?(?![a-zA-Z0-9])|^Params$?(?![a-zA-Z0-9])|^Number$?(?![a-zA-Z0-9])|^Bool$?(?![a-zA-Z0-9])|^Action$?|^Type$?(?![a-zA-Z0-9])|^Faction$?(?![a-zA-Z0-9])|^Power$?(?![a-zA-Z0-9])|^Range$?(?![a-zA-Z0-9])|^OnActivation$?(?![a-zA-Z0-9])|^Effect$?(?![a-zA-Z0-9])|^Selector$?(?![a-zA-Z0-9])|^Source$?(?![a-zA-Z0-9])|^Single$?(?![a-zA-Z0-9])|^Predicate$?(?![a-zA-Z0-9])|^PostAction$(?![a-zA-Z0-9])|^print$?(?![a-zA-Z0-9])|^if$?(?![a-zA-Z0-9])|^else$?(?![a-zA-Z0-9])|^CharacterDescription$?(?![a-zA-Z0-9])|^EffectDescription$?(?![a-zA-Z0-9])|^Quote$?(?![a-zA-Z0-9])|^TriggerPlayer$?(?![a-zA-Z0-9])|^Board$?(?![a-zA-Z0-9])|^HandOfPlayer$?(?![a-zA-Z0-9])|^GraveyardOfPlayer$?(?![a-zA-Z0-9])|DeckOfPlayer|^Owner$?(?![a-zA-Z0-9])|^Find$?(?![a-zA-Z0-9])|^Push$?(?![a-zA-Z0-9])|^SendBottom$?(?![a-zA-Z0-9])|^Pop$?(?![a-zA-Z0-9])|^Remove$?(?![a-zA-Z0-9])|^Shuffle$?(?![a-zA-Z0-9])|^FieldOfPlayer$?(?![a-zA-Z0-9])") },
         { TokenTypes.BooleanLiteral, new Regex("^true(?![a-zA-Z0-9])|^false(?![a-zA-Z0-9])") },
         { TokenTypes.NumericLiteral, new Regex(@"^\d+(\.\d+)?\b") },
         { TokenTypes.StringLiteral, new Regex("^\"[^\"]*\"") },
@@ -95,7 +95,20 @@ namespace GwentCompiler
                 {"EffectDescription", TokenSubtypes.EffectDescription},
                 {"CharacterDescription", TokenSubtypes.CharacterDescription},
                 {"Quote", TokenSubtypes.Quote},
-                {"Type", TokenSubtypes.Type}
+                {"Type", TokenSubtypes.Type},
+                {"TriggerPlayer", TokenSubtypes.TriggerPlayer},
+                {"Board", TokenSubtypes.Board},
+                {"HandOfPlayer", TokenSubtypes.HandOfPlayer},
+                {"FieldOfPlayer", TokenSubtypes.FieldOfPlayer},
+                {"GraveyardOfPlayer", TokenSubtypes.GraveyardOfPlayer},
+                {"DeckOfPlayer", TokenSubtypes.DeckOfPlayer},
+                {"Owner", TokenSubtypes.Owner},
+                {"Find", TokenSubtypes.Find},
+                {"Push", TokenSubtypes.Push},
+                {"SendBottom", TokenSubtypes.SendBottom},
+                {"Pop", TokenSubtypes.Pop},
+                {"Remove", TokenSubtypes.Remove},
+                {"Shuffle", TokenSubtypes.Shuffle},
             }
         },
         {

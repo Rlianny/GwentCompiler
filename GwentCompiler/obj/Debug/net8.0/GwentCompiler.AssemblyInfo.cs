@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("GwentCompiler")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+e6b01ad4a3591409bf43c12b0154e60b2c2c36bf")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+226f79c1e077d0127145c2d2b726da50536e3af4")]
 [assembly: System.Reflection.AssemblyProductAttribute("GwentCompiler")]
 [assembly: System.Reflection.AssemblyTitleAttribute("GwentCompiler")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

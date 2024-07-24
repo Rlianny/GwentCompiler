@@ -34,18 +34,18 @@ public static class ASTPrinter
             Print(group.Expression, idt);
         }
 
-        else if (expr is PropertyAccessExpr accessExpr)
+        else if (expr is ContextAccessExpr accessExpr)
         {
             idt++;
-            System.Console.WriteLine(space + accessExpr.Indexer);
-            Print(accessExpr.Value, idt);
-            Print(accessExpr.Args, idt);
+            System.Console.WriteLine(space + ".");
+            Console.WriteLine(accessExpr.Variable.Value.Lexeme);
+            Console.WriteLine(accessExpr.Acces.Lexeme);
         }
 
-        else if (expr is CallToMethodExpr call)
+        else if (expr is ContextMethodsExpr call)
         {
             System.Console.WriteLine(space + "Call");
-            Print(call.Value);
+            Print(call.AccessExpression);
             Print(call.Args);
         }
     }

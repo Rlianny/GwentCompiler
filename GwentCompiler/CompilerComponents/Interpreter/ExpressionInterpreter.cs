@@ -183,12 +183,12 @@ public partial class Interpreter : VisitorBase<Object>
         return value;
     }
 
-    public object Visit(PropertyAccessExpr expr)
+    public object Visit(ContextAccessExpr expr)
     {
         throw new NotImplementedException();
     }
 
-    public object Visit(CallToMethodExpr expr)
+    public object Visit(ContextMethodsExpr expr)
     {
         throw new NotImplementedException();
     }
