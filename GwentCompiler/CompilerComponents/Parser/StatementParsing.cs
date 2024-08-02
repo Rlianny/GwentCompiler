@@ -39,7 +39,7 @@ public partial class Parser
     private IStatement ExpressionStatement()
     {
         IExpression? expression = Expression();
-        Consume(TokenSubtypes.Semicolon, "Expect ; after expression;");
+        Consume(TokenSubtypes.Semicolon, "Expect ; after expression;", null);
         return new ExpressionStmt(expression);
     }
 
@@ -47,7 +47,7 @@ public partial class Parser
     private IStatement PrintStatement()
     {
         IExpression? expression = Expression();
-        Consume(TokenSubtypes.Semicolon, "Expect ';' after value.");
+        Consume(TokenSubtypes.Semicolon, "Expect ';' after value.", null);
         return new PrintStmt(expression);
     }
 
@@ -61,16 +61,16 @@ public partial class Parser
             statements.Add(Statement());
         }
 
-        Consume(TokenSubtypes.CloseBrace, "Expect } after block");
+        Consume(TokenSubtypes.CloseBrace, "Expect } after block", null);
         return statements;
     }
 
     // *IfStmt* -> "if" "(" Expression ")" Statement ("else" Statement)?;
     private IStatement IfStatement()
     {
-        Consume(TokenSubtypes.OpenParenthesis, "Expect '(' after 'if'.");
+        Consume(TokenSubtypes.OpenParenthesis, "Expect '(' after 'if'." , null);
         IExpression? condition = Expression();
-        Consume(TokenSubtypes.CloseParenthesis, "Expect ')' after condition");
+        Consume(TokenSubtypes.CloseParenthesis, "Expect ')' after condition", null);
         IStatement? thenStatement = Statement();
 
         IStatement? elseStatement = null;
@@ -86,9 +86,9 @@ public partial class Parser
     // *WhileStmt* -> "while" "(" Expression ")" Estatement;
     private IStatement? WhileStatement()
     {
-        Consume(TokenSubtypes.OpenParenthesis, "Expect '(' after 'while'.");
+        Consume(TokenSubtypes.OpenParenthesis, "Expect '(' after 'while'.", null);
         IExpression? condition = Expression();
-        Consume(TokenSubtypes.CloseParenthesis, "Expect ')' after condition");
+        Consume(TokenSubtypes.CloseParenthesis, "Expect ')' after condition", null);
         IStatement? body = Statement();
         return new WhileStmt(condition, body);
 
@@ -97,11 +97,11 @@ public partial class Parser
     // *ForStmt* -> "for" "(" Variable "in" Expression ")" Block;
     private IStatement? ForStatement()
     {
-        Consume(TokenSubtypes.OpenParenthesis, "Expect '(' after for.");
-        Variable variable = new Variable(Consume(TokenSubtypes.Identifier, "Expect identifier in for statement"));
-        Consume(TokenSubtypes.In, "Expect 'in' in for statement");
+        Consume(TokenSubtypes.OpenParenthesis, "Expect '(' after for.", null);
+        Variable variable = new Variable(Consume(TokenSubtypes.Identifier, "Expect identifier in for statement", new List<TokenSubtypes>{TokenSubtypes.CloseParenthesis}));
+        Consume(TokenSubtypes.In, "Expect 'in' in for statement", new List<TokenSubtypes>{TokenSubtypes.CloseParenthesis});
         IExpression? collection = Expression();
-        Consume(TokenSubtypes.CloseParenthesis, "Expect ')' in for statement.");
+        Consume(TokenSubtypes.CloseParenthesis, "Expect ')' in for statement.", null);
         List<IStatement?>? body = null;
         if (Match(TokenSubtypes.OpenBrace))
         {

@@ -2,11 +2,12 @@ namespace GwentCompiler;
 
 public partial class Parser
 {
-    private Token? Consume(TokenSubtypes subtype, string message)
+    private Token? Consume(TokenSubtypes subtype, string message, List<TokenSubtypes>? limit)
     {
         if (Check(subtype)) return Advance();
 
-        GenerateError(message, Peek().Location);
+        GenerateError(message, new CodeLocation(Previous().Location.Row, Previous().Location.Column + Previous().Lexeme.Length));
+        Synchronize(limit);
         return null;
     }
 
@@ -46,6 +47,19 @@ public partial class Parser
     {
         if (IsAtEnd()) return false;
         return Peek().Subtype == tokenSubtype;
+    }
+
+    private bool Check(List<TokenSubtypes> Types)
+    {
+        foreach (TokenSubtypes subtype in Types)
+        {
+            if (Check(subtype))
+            {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     /// <summary>
@@ -102,8 +116,16 @@ public partial class Parser
         Console.WriteLine(error);
     }
 
-    private void Sinchronize()
-    {
+    private void Synchronize(List<TokenSubtypes>? synchronizer)
+    {   
+        Advance();
+        
+        if(synchronizer == null) return; 
 
+        while (!IsAtEnd())
+        {
+            if (Check(synchronizer)) return;
+            Advance();
+        }
     }
 }

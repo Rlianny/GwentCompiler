@@ -59,7 +59,7 @@ public partial class Interpreter : VisitorBase<Object>
         var left = Evaluate(expr.Left);
         var right = Evaluate(expr.Right);
 
-        if (left is int leftInt && right is int rigthInt) return leftInt > rigthInt;
+        if (left is double leftInt && right is double rigthInt) return leftInt > rigthInt;
         else throw new RuntimeError("The operands must to be a number", expr.Operator.Location);
     }
 
@@ -68,7 +68,7 @@ public partial class Interpreter : VisitorBase<Object>
         var left = Evaluate(expr.Left);
         var right = Evaluate(expr.Right);
 
-        if (left is int leftInt && right is int rigthInt) return leftInt >= rigthInt;
+        if (left is double leftInt && right is double rigthInt) return leftInt >= rigthInt;
         else throw new RuntimeError("The operands must to be a number", expr.Operator.Location);
     }
 
@@ -77,7 +77,7 @@ public partial class Interpreter : VisitorBase<Object>
         var left = Evaluate(expr.Left);
         var right = Evaluate(expr.Right);
 
-        if (left is int leftInt && right is int rigthInt) return leftInt < rigthInt;
+        if (left is double leftInt && right is double rigthInt) return leftInt < rigthInt;
         else throw new RuntimeError("The operands must to be a number", expr.Operator.Location);
     }
 
@@ -86,7 +86,7 @@ public partial class Interpreter : VisitorBase<Object>
         var left = Evaluate(expr.Left);
         var right = Evaluate(expr.Right);
 
-        if (left is int leftInt && right is int rigthInt) return leftInt <= rigthInt;
+        if (left is double leftInt && right is double rigthInt) return leftInt <= rigthInt;
         else throw new RuntimeError("The operands must to be a number", expr.Operator.Location);
     }
 
@@ -95,7 +95,7 @@ public partial class Interpreter : VisitorBase<Object>
         var left = Evaluate(expr.Left);
         var right = Evaluate(expr.Right);
 
-        if (left is int leftInt && right is int rigthInt) return leftInt + rigthInt;
+        if (left is double leftInt && right is double rigthInt) return leftInt + rigthInt;
         else throw new RuntimeError("The operands must to be a number", expr.Operator.Location);
     }
 
@@ -104,7 +104,7 @@ public partial class Interpreter : VisitorBase<Object>
         var left = Evaluate(expr.Left);
         var right = Evaluate(expr.Right);
 
-        if (left is int leftInt && right is int rigthInt) return leftInt - rigthInt;
+        if (left is double leftInt && right is double rigthInt) return leftInt - rigthInt;
         else throw new RuntimeError("The operands must to be a number", expr.Operator.Location);
     }
 
@@ -113,7 +113,7 @@ public partial class Interpreter : VisitorBase<Object>
         var left = Evaluate(expr.Left);
         var right = Evaluate(expr.Right);
 
-        if (left is int leftInt && right is int rigthInt) return leftInt * rigthInt;
+        if (left is double leftInt && right is double rigthInt) return leftInt * rigthInt;
         else throw new RuntimeError("The operands must to be a number", expr.Operator.Location);
     }
 
@@ -122,7 +122,7 @@ public partial class Interpreter : VisitorBase<Object>
         var left = Evaluate(expr.Left);
         var right = Evaluate(expr.Right);
 
-        if (left is int leftInt && right is int rigthInt) return leftInt / rigthInt;
+        if (left is double leftInt && right is double rigthInt) return leftInt / rigthInt;
         else throw new RuntimeError("The operands must to be a number", expr.Operator.Location);
     }
 
@@ -131,7 +131,7 @@ public partial class Interpreter : VisitorBase<Object>
         var left = Evaluate(expr.Left);
         var right = Evaluate(expr.Right);
 
-        if (left is int leftInt && right is int rigthInt) return Math.Pow(leftInt, rigthInt);
+        if (left is double leftInt && right is double rigthInt) return Math.Pow(leftInt, rigthInt);
         else throw new RuntimeError("The operands must to be a number", expr.Operator.Location);
     }
 
@@ -147,13 +147,13 @@ public partial class Interpreter : VisitorBase<Object>
     {
         var right = Evaluate(substraction.Rigth);
 
-        if (right is int rightInt) return -rightInt;
+        if (right is double rightInt) return -rightInt;
         else throw new RuntimeError("The operand must to be a number", substraction.Operator.Location);
     }
 
     public object Visit(NumericLiteral literal)
     {
-        return int.Parse(literal.Value.Lexeme);
+        return double.Parse(literal.Value.Lexeme);
     }
 
     public object Visit(StringLiteral literal)
@@ -197,7 +197,7 @@ public partial class Interpreter : VisitorBase<Object>
     {
         var value = environment.Get(expr.Name.Value);
 
-        if (value is int valueInt)
+        if (value is double valueInt)
         {
             if (expr.Operation.Subtype == TokenSubtypes.PostDecrement) valueInt--;
             else valueInt++;

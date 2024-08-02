@@ -1,3 +1,5 @@
+using System.Linq.Expressions;
+
 namespace GwentCompiler;
 public class CardDeclaration : IProgramNode
 {
@@ -102,30 +104,69 @@ public class CardDeclaration : IProgramNode
 }
 
 public abstract class CardComponent : IASTNode;
-public abstract class StringFieldComponent : CardComponent
+public abstract class GenericFieldComponent : CardComponent
 {
-    public Token Operator {get; private set;}
+    public Token Operator { get; private set; }
     public IExpression Value { get; private set; }
-    public StringFieldComponent(IExpression value, Token @operator)
+    public GenericFieldComponent(IExpression value, Token @operator)
     {
         Value = value;
         Operator = @operator;
     }
 }
-public class CardTypeDeclaration(IExpression value, Token @operator) : StringFieldComponent(value, @operator);
-public class CardNameDeclaration(IExpression value, Token @operator) : StringFieldComponent(value, @operator);
-public class CardFactionDeclaration(IExpression value, Token @operator) : StringFieldComponent(value, @operator);
+public class CardTypeDeclaration(IExpression value, Token @operator) : GenericFieldComponent(value, @operator);
+public class CardNameDeclaration(IExpression value, Token @operator) : GenericFieldComponent(value, @operator);
+public class CardFactionDeclaration(IExpression value, Token @operator) : GenericFieldComponent(value, @operator);
 public class CardRangeDeclaration : CardComponent
 {
-    public List<IExpression?> Ranges {get; private set;}
+    public List<IExpression?> Ranges { get; private set; }
+    public Token Operator {get; private set;}
 
-    public CardRangeDeclaration(List<IExpression?> value)
+    public CardRangeDeclaration(List<IExpression?> value, Token op)
     {
         Ranges = value;
+        Operator = op;
     }
 }
-public class CardPowerDeclaration(IExpression value, Token @operator) : StringFieldComponent(value, @operator);
-public class CardEffectDescriptionDeclaration(IExpression value, Token @operator) : StringFieldComponent(value, @operator);
-public class CardCharacterDescriptionDeclaration(IExpression value, Token @operator) : StringFieldComponent(value, @operator);
-public class CardQuoteDeclaration(IExpression value, Token @operator) : StringFieldComponent(value, @operator);
-public class OnActivation : CardComponent;
+public class CardPowerDeclaration(IExpression value, Token @operator) : GenericFieldComponent(value, @operator);
+public class CardEffectDescriptionDeclaration(IExpression value, Token @operator) : GenericFieldComponent(value, @operator);
+public class CardCharacterDescriptionDeclaration(IExpression value, Token @operator) : GenericFieldComponent(value, @operator);
+public class CardQuoteDeclaration(IExpression value, Token @operator) : GenericFieldComponent(value, @operator);
+public class OnActivation : CardComponent
+{
+    public List<ActivationData> Activations = new();
+}
+
+public class ActivationData
+{
+    public EffectInfo Effect;
+    public Selector Selector;
+    public PostAction PostAction;
+
+    public ActivationData(EffectInfo effect, Selector selector, PostAction postAction)
+    {
+        Effect = effect;
+        Selector = selector;
+        PostAction = postAction;
+    }
+}
+
+public class EffectInfo
+{
+    
+}
+
+public class Selector
+{
+
+}
+
+public class PostAction
+{
+    ActivationData LinkedEffect;
+
+    public PostAction(ActivationData linkedEffect)
+    {
+        LinkedEffect = linkedEffect;
+    }
+}

@@ -6,7 +6,7 @@ public partial class Parser
     {
         CardDeclaration parsedCard = new();
 
-        Consume(TokenSubtypes.OpenBrace, "Card must declare a body");
+        Consume(TokenSubtypes.OpenBrace, "Card must declare a body", new List<TokenSubtypes> { TokenSubtypes.CloseBrace });
         while (!Match(TokenSubtypes.CloseBrace))
         {
             if (Match(TokenSubtypes.Type))
@@ -15,13 +15,16 @@ public partial class Parser
                 if (value == null)
                 {
                     GenerateError("The card must to declare a type", Previous().Location);
+                    Synchronize(new List<TokenSubtypes> { TokenSubtypes.Comma });
                     return null;
                 }
                 if (!parsedCard.SetComponent(value))
                 {
                     GenerateError("The card type has been defined before", Previous().Location);
+                    Synchronize(new List<TokenSubtypes> { TokenSubtypes.Comma });
                     break;
                 }
+                continue;
             }
 
             if (Match(TokenSubtypes.Name))
@@ -30,14 +33,17 @@ public partial class Parser
                 if (value == null)
                 {
                     GenerateError("The card must to declare a name", Previous().Location);
+                    Synchronize(new List<TokenSubtypes> { TokenSubtypes.Comma });
                     return null;
                 }
 
                 if (!parsedCard.SetComponent(value))
                 {
                     GenerateError("The card name has been defined before", Previous().Location);
+                    Synchronize(new List<TokenSubtypes> { TokenSubtypes.Comma });
                     break;
                 }
+                continue;
             }
 
             if (Match(TokenSubtypes.Faction))
@@ -46,13 +52,16 @@ public partial class Parser
                 if (value == null)
                 {
                     GenerateError("The card must to declare a faction", Previous().Location);
+                    Synchronize(new List<TokenSubtypes> { TokenSubtypes.Comma });
                     return null;
                 }
                 if (!parsedCard.SetComponent(value))
                 {
                     GenerateError("The card faction has been defined before", Previous().Location);
+                    Synchronize(new List<TokenSubtypes> { TokenSubtypes.Comma });
                     break;
                 }
+                continue;
             }
 
             if (Match(TokenSubtypes.Range))
@@ -61,13 +70,16 @@ public partial class Parser
                 if (value == null)
                 {
                     GenerateError("The card must to declare a range", Previous().Location);
+                    Synchronize(new List<TokenSubtypes> { TokenSubtypes.Comma });
                     return null;
                 }
                 if (!parsedCard.SetComponent(value))
                 {
                     GenerateError("The card range has been defined before", Previous().Location);
+                    Synchronize(new List<TokenSubtypes> { TokenSubtypes.Comma });
                     break;
                 }
+                continue;
             }
 
             if (Match(TokenSubtypes.Power))
@@ -76,13 +88,16 @@ public partial class Parser
                 if (value == null)
                 {
                     GenerateError("The card must to declare a power", Previous().Location);
+                    Synchronize(new List<TokenSubtypes> { TokenSubtypes.Comma });
                     return null;
                 }
                 if (!parsedCard.SetComponent(value))
                 {
                     GenerateError("The card power has been defined before", Previous().Location);
+                    Synchronize(new List<TokenSubtypes> { TokenSubtypes.Comma });
                     break;
                 }
+                continue;
             }
 
             if (Match(TokenSubtypes.OnActivation))
@@ -91,13 +106,16 @@ public partial class Parser
                 if (value == null)
                 {
                     GenerateError("The card must to declare a OnActivation field", Previous().Location);
+                    Synchronize(new List<TokenSubtypes> { TokenSubtypes.CloseBracket });
                     return null;
                 }
                 if (!parsedCard.SetComponent(value))
                 {
                     GenerateError("The card OnActivation field has been defined before", Previous().Location);
+                    Synchronize(new List<TokenSubtypes> { TokenSubtypes.CloseBracket });
                     break;
                 }
+                continue;
             }
 
             if (Match(TokenSubtypes.EffectDescription))
@@ -106,13 +124,16 @@ public partial class Parser
                 if (value == null)
                 {
                     GenerateError("The card must to declare a effect description", Previous().Location);
+                    Synchronize(new List<TokenSubtypes> { TokenSubtypes.Comma });
                     return null;
                 }
                 if (!parsedCard.SetComponent(value))
                 {
                     GenerateError("The effect description has been defined before", Previous().Location);
+                    Synchronize(new List<TokenSubtypes> { TokenSubtypes.Comma });
                     break;
                 }
+                continue;
             }
 
             if (Match(TokenSubtypes.CharacterDescription))
@@ -121,13 +142,16 @@ public partial class Parser
                 if (value == null)
                 {
                     GenerateError("The card must to declare a character description", Previous().Location);
+                    Synchronize(new List<TokenSubtypes> { TokenSubtypes.Comma });
                     return null;
                 }
                 if (!parsedCard.SetComponent(value))
                 {
                     GenerateError("The character description has been defined before", Previous().Location);
+                    Synchronize(new List<TokenSubtypes> { TokenSubtypes.Comma });
                     break;
                 }
+                continue;
             }
 
             if (Match(TokenSubtypes.Quote))
@@ -136,14 +160,20 @@ public partial class Parser
                 if (value == null)
                 {
                     GenerateError("The card must to declare a quote", Previous().Location);
+                    Synchronize(new List<TokenSubtypes> { TokenSubtypes.Comma });
                     return null;
                 }
                 if (!parsedCard.SetComponent(value))
                 {
                     GenerateError("The card quote has been defined before", Previous().Location);
+                    Synchronize(new List<TokenSubtypes> { TokenSubtypes.Comma });
                     break;
                 }
+                continue;
             }
+
+            Synchronize(new List<TokenSubtypes>{TokenSubtypes.card, TokenSubtypes.effect});
+            break;
         }
 
         //Consume(TokenSubtypes.OpenBrace, "Expect '}' after card body");
@@ -154,13 +184,13 @@ public partial class Parser
     private CardComponent? GenericField()
     {
         var component = Previous();
-        Token? colon = Consume(TokenSubtypes.Colon, "Expected ':'");
+        Token? colon = Consume(TokenSubtypes.Colon, "Expected ':'", new List<TokenSubtypes> { TokenSubtypes.Comma });
         if (colon == null) return null;
         IExpression? value = Expression();
 
         if (value == null) return null;
 
-        Consume(TokenSubtypes.Comma, "Expected ',' after field declaration");
+        Consume(TokenSubtypes.Comma, "Expected ',' after field declaration", null);
 
         switch (component.Subtype)
         {
@@ -186,16 +216,18 @@ public partial class Parser
     private CardComponent? CardRange()
     {
         List<IExpression?> ranges = new();
-        Consume(TokenSubtypes.OpenBrace, "Expect '['");
-        while (!Match(TokenSubtypes.CloseBrace))
+        Token? colon = Consume(TokenSubtypes.Colon, "Expected ':'", null);
+        Consume(TokenSubtypes.OpenBracket, "Expect '['", new List<TokenSubtypes> { TokenSubtypes.CloseBracket });
+        while (!Match(TokenSubtypes.CloseBracket))
         {
             ranges.Add(Expression());
-            if (!Check(TokenSubtypes.CloseBrace))
+            if (!Check(TokenSubtypes.CloseBracket))
             {
-                Consume(TokenSubtypes.Comma, "Expect ','");
+                Consume(TokenSubtypes.Comma, "Expect ','", new List<TokenSubtypes> { TokenSubtypes.CloseBracket });
             }
         }
-        return new CardRangeDeclaration(ranges);
+        Consume(TokenSubtypes.Comma, "Expect ','", null);
+        return new CardRangeDeclaration(ranges, colon);
     }
 
     private CardComponent? OnActivation()

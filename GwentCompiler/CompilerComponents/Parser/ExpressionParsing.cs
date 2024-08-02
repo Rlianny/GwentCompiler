@@ -238,7 +238,7 @@ public partial class Parser
         if (Match(TokenSubtypes.OpenParenthesis))
         {
             IExpression? expr = Expression();
-            Token? close = Consume(TokenSubtypes.CloseParenthesis, ") expected after expression.");
+            Token? close = Consume(TokenSubtypes.CloseParenthesis, ") expected after expression.", null);
 
             if (close == null) return null;
 
@@ -270,7 +270,7 @@ public partial class Parser
                         if (Match(TokenSubtypes.OpenParenthesis))
                         {
                             args = Expression();
-                            Consume(TokenSubtypes.CloseParenthesis, "Expect ')' after methods arguments");
+                            Consume(TokenSubtypes.CloseParenthesis, "Expect ')' after methods arguments", null);
                         }
                     }
 
@@ -336,52 +336,52 @@ public partial class Parser
         if (Match(TokenSubtypes.Find))
         {
             Token method = Previous();
-            Consume(TokenSubtypes.OpenParenthesis, "Expected '('");
+            Consume(TokenSubtypes.OpenParenthesis, "Expected '('", new List<TokenSubtypes>{TokenSubtypes.CloseParenthesis});
             IExpression? args = Expression();
-            Consume(TokenSubtypes.CloseParenthesis, "Expected ')'");
+            Consume(TokenSubtypes.CloseParenthesis, "Expected ')'", null);
             return new FindMethodExpr(access, method, args);
         }
 
         if (Match(TokenSubtypes.Push))
         {
             Token method = Previous();
-            Consume(TokenSubtypes.OpenParenthesis, "Expected '('");
+            Consume(TokenSubtypes.OpenParenthesis, "Expected '('", new List<TokenSubtypes>{TokenSubtypes.CloseParenthesis});
             IExpression? args = Expression();
-            Consume(TokenSubtypes.CloseParenthesis, "Expected ')'");
+            Consume(TokenSubtypes.CloseParenthesis, "Expected ')'", null);
             return new PushMethodExpr(access, method, args);
         }
 
         if (Match(TokenSubtypes.SendBottom))
         {
             Token method = Previous();
-            Consume(TokenSubtypes.OpenParenthesis, "Expected '('");
+            Consume(TokenSubtypes.OpenParenthesis, "Expected '('", new List<TokenSubtypes>{TokenSubtypes.CloseParenthesis});
             IExpression? args = Expression();
-            Consume(TokenSubtypes.CloseParenthesis, "Expected ')'");
+            Consume(TokenSubtypes.CloseParenthesis, "Expected ')'", null);
             return new SendBottomMethodExpr(access, method, args);
         }
 
         if (Match(TokenSubtypes.Pop))
         {
             Token method = Previous();
-            Consume(TokenSubtypes.OpenParenthesis, "Expected '('");
-            Consume(TokenSubtypes.CloseParenthesis, "Expected ')'");
+            Consume(TokenSubtypes.OpenParenthesis, "Expected '('", new List<TokenSubtypes>{TokenSubtypes.CloseParenthesis});
+            Consume(TokenSubtypes.CloseParenthesis, "Expected ')'", null);
             return new PopMethodExpr(access, method, null);
         }
 
         if (Match(TokenSubtypes.Remove))
         {
             Token method = Previous();
-            Consume(TokenSubtypes.OpenParenthesis, "Expected '('");
+            Consume(TokenSubtypes.OpenParenthesis, "Expected '('", new List<TokenSubtypes>{TokenSubtypes.CloseParenthesis});
             IExpression? args = Expression();
-            Consume(TokenSubtypes.CloseParenthesis, "Expected ')'");
+            Consume(TokenSubtypes.CloseParenthesis, "Expected ')'", null);
             return new RemoveMethodExpr(access, method, args);
         }
 
         if (Match(TokenSubtypes.Shuffle))
         {
             Token method = Previous();
-            Consume(TokenSubtypes.OpenParenthesis, "Expected '('");
-            Consume(TokenSubtypes.CloseParenthesis, "Expected ')'");
+            Consume(TokenSubtypes.OpenParenthesis, "Expected '('", new List<TokenSubtypes>{TokenSubtypes.CloseParenthesis});
+            Consume(TokenSubtypes.CloseParenthesis, "Expected ')'", null);
             return new ShuffleMethodExpr(access, method, null);
         }
 

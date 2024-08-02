@@ -44,6 +44,7 @@ public partial class Parser : IErrorReporter
             }
 
             GenerateError("Invalid declaration type, expect card or effect", Peek().Location);
+            Synchronize(new List<TokenSubtypes>{TokenSubtypes.card, TokenSubtypes.effect});
             break;
         }
 

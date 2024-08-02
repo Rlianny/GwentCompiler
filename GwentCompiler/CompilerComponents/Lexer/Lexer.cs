@@ -14,7 +14,7 @@ public class Lexer : IErrorReporter
     public List<Token> Tokenize(string input)
     {
         source = input;
-        string[] lines = input.Split('\n', StringSplitOptions.RemoveEmptyEntries);
+        string[] lines = input.Split('\n');
 
         foreach (string line in lines)
         {
