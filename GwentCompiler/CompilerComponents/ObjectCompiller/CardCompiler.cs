@@ -18,6 +18,9 @@ public partial class ObjectCompiller
         List<string>? range = null;
         if (node.Range != null && interpreter.Interpret(node.Range) is List<string> rangeList) range = rangeList;
 
+        List<EffectActivation>? onAct = null;
+        if(node.OnActivationField != null && interpreter.Interpret(node.OnActivationField) is List<EffectActivation> activations) onAct = activations;
+
         string? effectDescription = null;
         if (node.EffectDescription != null && interpreter.Interpret(node.EffectDescription) is string stringEffectDescription) effectDescription = stringEffectDescription;
 
@@ -30,7 +33,7 @@ public partial class ObjectCompiller
         double power = 0;
         if (node.Power != null && interpreter.Interpret(node.Power) is double intPower) power = intPower;
 
-        return new CompiledCard(cardType, cardName, cardFaction, range, effectDescription, (int)power, characterDescription, quote);
+        return new CompiledCard(cardType, cardName, cardFaction, range, onAct, effectDescription, (int)power, characterDescription, quote);
 
     }
 

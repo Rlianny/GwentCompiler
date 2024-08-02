@@ -172,7 +172,7 @@ public partial class Parser
                 continue;
             }
 
-            Synchronize(new List<TokenSubtypes>{TokenSubtypes.card, TokenSubtypes.effect});
+            Synchronize(new List<TokenSubtypes> { TokenSubtypes.card, TokenSubtypes.effect });
             break;
         }
 
@@ -232,6 +232,140 @@ public partial class Parser
 
     private CardComponent? OnActivation()
     {
+        Token? colon = Consume(TokenSubtypes.Colon, "Expected ':'", null);
+        Consume(TokenSubtypes.OpenBracket, "Expect '['", new List<TokenSubtypes> { TokenSubtypes.CloseBracket });
+        List<ActivationData> data = new();
+        while (!Match(TokenSubtypes.CloseBracket))
+        {
+            data.Add(ActivationData());
+        }
+        return new OnActivation(data, colon);
+
+    }
+
+    private ActivationData ActivationData()
+    {
+        Consume(TokenSubtypes.OpenBrace, "Was expected '{'", null);
+        EffectInfo effectInfo = EffectInfo();
+        Selector selector = Selector();
+        PostAction postAction = PostAction();
+        Consume(TokenSubtypes.CloseBrace, "Was expected '}'", null);
+
+        return new ActivationData(effectInfo, selector, postAction);
+    }
+
+    private EffectInfo EffectInfo()
+    {
+        Consume(TokenSubtypes.Effect, "Effect information declaration expected", new List<TokenSubtypes> { TokenSubtypes.CloseBrace });
+        Token? colon = Consume(TokenSubtypes.Colon, "Was expected ':'", null);
+        IExpression? name = null;
+        List<OnActivationParam?>? @params = new();
+        if (Match(TokenSubtypes.OpenBrace))
+        {
+            Consume(TokenSubtypes.Name, "Effect name expected", new List<TokenSubtypes> { TokenSubtypes.Comma });
+            Consume(TokenSubtypes.Colon, "Was expected ':'", null);
+            name = Expression();
+            Consume(TokenSubtypes.Comma, "Was expected ','", null);
+            while (!Match(TokenSubtypes.CloseBrace))
+            {
+                @params.Add(OnActivationParam());
+            }
+            Consume(TokenSubtypes.Comma, "Was expected ','", null);
+        }
+        else name = Expression();
+
+        return new EffectInfo(name, @params, colon);
+
+    }
+
+    private OnActivationParam? OnActivationParam()
+    {
+        Token token = Peek();
+        var variable = Expression();
+        if (variable is Variable var)
+        {
+            Token? colon = Consume(TokenSubtypes.Colon, "Was expected ':'", null);
+            IExpression? value = Expression();
+            Consume(TokenSubtypes.Comma, "Was expected ','", null);
+            return new OnActivationParam(var, colon, value);
+        }
+        GenerateError("Was expected a variable", token.Location);
+        Synchronize(new List<TokenSubtypes>() { TokenSubtypes.CloseBrace });
         return null;
     }
+
+    private Selector Selector()
+    {
+        Consume(TokenSubtypes.Selector, "Effect selector declaration expected", new List<TokenSubtypes> { TokenSubtypes.CloseBrace });
+        Token? colon = Consume(TokenSubtypes.Colon, "Was expected ':'", null);
+        Consume(TokenSubtypes.OpenBrace, "Was expected '{'", null);
+        SelectorSource source = Source();
+        SelectorSingle? single = null;
+        if (Match(TokenSubtypes.Single))
+        {
+            single = Single();
+        }
+        SelectorPredicate predicate = Predicate();
+        Consume(TokenSubtypes.CloseBrace, "Was expected '}'", null);
+        Consume(TokenSubtypes.Comma, "Was expect ','", null);
+        return new Selector(source, single, predicate);
+    }
+
+    private SelectorSource Source()
+    {
+        Consume(TokenSubtypes.Source, "Source declaration expected", new List<TokenSubtypes> { TokenSubtypes.CloseBrace });
+        Token? colon = Consume(TokenSubtypes.Colon, "Was expected ':'", null);
+        IExpression source = Expression();
+        Consume(TokenSubtypes.Comma, "Was expected ','", null);
+        return new SelectorSource(source, colon);
+    }
+
+    public SelectorSingle Single()
+    {
+        Token? colon = Consume(TokenSubtypes.Colon, "Was expected ':'", null);
+        IExpression single = Expression();
+        Consume(TokenSubtypes.Comma, "Was expected ','", null);
+        return new SelectorSingle(single, colon);
+    }
+
+    public SelectorPredicate? Predicate()
+    {
+        Consume(TokenSubtypes.Predicate, "Predicate declaration expected", new List<TokenSubtypes> { TokenSubtypes.CloseBrace });
+        Consume(TokenSubtypes.Colon, "Was expected ':'", null);
+        var parenthesis = Consume(TokenSubtypes.OpenParenthesis, "Was expected '('", null);
+        var var = Expression();
+        if (var is Variable variable)
+        {
+            Consume(TokenSubtypes.CloseParenthesis, "Was expected ')'", null);
+            var lambda = Consume(TokenSubtypes.Lambda, "Was expected '=>'", null);
+            IExpression? expression = Expression();
+            return new SelectorPredicate(variable, lambda, expression);
+        }
+        GenerateError("Was expect a variable", parenthesis.Location);
+        Synchronize(new List<TokenSubtypes> { TokenSubtypes.CloseBrace });
+        return null;
+    }
+
+    private PostAction PostAction()
+    {
+        if (Match(TokenSubtypes.PostAction))
+        {
+            Consume(TokenSubtypes.OpenBrace, "Was expected '{'", null);
+            Consume(TokenSubtypes.Type, "Effect name declaration expected", new List<TokenSubtypes> { TokenSubtypes.CloseBrace });
+            Token? colon = Consume(TokenSubtypes.Colon, "Was expected ':'", null);
+            IExpression? name = Expression();
+            EffectInfo info = new EffectInfo(name, null, colon);
+            Selector selector = null;
+            if (Match(TokenSubtypes.Selector))
+            {
+                selector = Selector();
+            }
+            PostAction postAction = PostAction();
+            Consume(TokenSubtypes.CloseBrace, "Was expected '}'", null);
+            return new PostAction(new ActivationData(info, selector, postAction));
+        }
+        else return null;
+    }
+
+
 }

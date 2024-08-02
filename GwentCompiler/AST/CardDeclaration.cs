@@ -1,5 +1,3 @@
-using System.Linq.Expressions;
-
 namespace GwentCompiler;
 public class CardDeclaration : IProgramNode
 {
@@ -134,10 +132,17 @@ public class CardCharacterDescriptionDeclaration(IExpression value, Token @opera
 public class CardQuoteDeclaration(IExpression value, Token @operator) : GenericFieldComponent(value, @operator);
 public class OnActivation : CardComponent
 {
+    public Token Operator {get; private set;}
     public List<ActivationData> Activations = new();
+
+    public OnActivation(List<ActivationData> data, Token op)
+    {
+        Activations = data;
+        Operator = op;
+    }
 }
 
-public class ActivationData
+public class ActivationData : CardComponent
 {
     public EffectInfo Effect;
     public Selector Selector;
@@ -153,20 +158,91 @@ public class ActivationData
 
 public class EffectInfo
 {
-    
+    public IExpression EffectName {get; private set;}
+    public List<OnActivationParam> ActivationParams{get; private set;}
+    public Token? Colon {get; private set;}
+
+    public EffectInfo(IExpression effectName, List<OnActivationParam> @params, Token? colon)
+    {
+        EffectName = effectName;
+        ActivationParams = @params;
+        Colon = colon;
+    }
+
 }
 
 public class Selector
 {
+    public SelectorSource Source {get; private set;}
+    public SelectorSingle Single {get; private set;}
+    public SelectorPredicate Predicate {get; private set;}
 
+    public Selector(SelectorSource source, SelectorSingle single, SelectorPredicate predicate)
+    {
+        Source = source;
+        Single = single;
+        Predicate = predicate;
+    }
+}
+
+public class SelectorSource
+{
+    public IExpression Source {get; private set;}
+    public Token Operator {get; private set;}
+
+    public SelectorSource(IExpression source, Token colon)
+    {
+        Source = source;
+        Operator = colon;
+    }
+}
+
+public class SelectorSingle
+{
+    public IExpression Single {get; private set;}
+    public Token Operator {get; private set;}
+
+    public SelectorSingle(IExpression single, Token op)
+    {
+        Single = single;
+        Operator = op;
+    }
+}
+
+public class SelectorPredicate
+{
+    public Variable Variable {get; private set;}
+    public Token Lambda {get; private set;}
+    public IExpression Expression {get; private set;}
+
+    public SelectorPredicate(Variable variable, Token lambda, IExpression expression)
+    {
+        Variable = variable;
+        Lambda = lambda;
+        Expression = expression;
+    }
 }
 
 public class PostAction
 {
-    ActivationData LinkedEffect;
+    public ActivationData LinkedEffect {get; private set;}
 
     public PostAction(ActivationData linkedEffect)
     {
         LinkedEffect = linkedEffect;
+    }
+}
+
+public class OnActivationParam
+{
+    public Variable VarName {get; private set;}
+    public Token Colon {get; private set;}
+    public IExpression Value {get; private set;}
+
+    public OnActivationParam(Variable variable, Token colon, IExpression expression)
+    {
+        VarName = variable;
+        Colon = colon;
+        Value = expression;
     }
 }

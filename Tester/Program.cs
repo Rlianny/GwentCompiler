@@ -14,7 +14,11 @@ static class Program
 
     static void Main()
     {
-        string path = GetFileContent("/home/lianny/$/home/lianny/Proyecto/ProyectoGwent++/Compiler/TestFile/Input");
+        string path = GetFileContent("/home/lianny/$/home/lianny/Proyecto/ProyectoGwent++/Compiler/TestFile/Input.txt");
+
+        Effect effect = new Effect("Holiwis", new List<Parameter>(){new Parameter("Amount", ValueType.Number), new Parameter("Card", ValueType.String)});
+        Effect.AllEffects.Add("Holiwis", effect);
+
         Compile(path);
     }
 

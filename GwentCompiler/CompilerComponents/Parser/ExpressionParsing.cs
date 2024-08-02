@@ -259,13 +259,13 @@ public partial class Parser
             {
                 Token dot = Previous();
 
-                if (Match(new List<TokenSubtypes>() { TokenSubtypes.TriggerPlayer, TokenSubtypes.Board, TokenSubtypes.HandOfPlayer, TokenSubtypes.FieldOfPlayer, TokenSubtypes.GraveyardOfPlayer, TokenSubtypes.DeckOfPlayer, TokenSubtypes.Owner }))
+                if (Match(new List<TokenSubtypes>() { TokenSubtypes.TriggerPlayer, TokenSubtypes.Board, TokenSubtypes.HandOfPlayer, TokenSubtypes.FieldOfPlayer, TokenSubtypes.GraveyardOfPlayer, TokenSubtypes.DeckOfPlayer, TokenSubtypes.Owner, TokenSubtypes.Type, TokenSubtypes.Name, TokenSubtypes.Faction, TokenSubtypes.Power }))
                 {
                     Token acces = Previous();
                     IExpression? args = null;
 
 
-                    if (acces.Subtype == TokenSubtypes.HandOfPlayer || acces.Subtype == TokenSubtypes.FieldOfPlayer || acces.Subtype == TokenSubtypes.GraveyardOfPlayer || acces.Subtype == TokenSubtypes.DeckOfPlayer)
+                    if (acces.Subtype == TokenSubtypes.HandOfPlayer || acces.Subtype == TokenSubtypes.FieldOfPlayer || acces.Subtype == TokenSubtypes.GraveyardOfPlayer || acces.Subtype == TokenSubtypes.DeckOfPlayer || acces.Subtype == TokenSubtypes.Type || acces.Subtype == TokenSubtypes.Name || acces.Subtype == TokenSubtypes.Faction || acces.Subtype == TokenSubtypes.Power)
                     {
                         if (Match(TokenSubtypes.OpenParenthesis))
                         {
@@ -305,6 +305,10 @@ public partial class Parser
                         case TokenSubtypes.Owner:
                             expr = new CardOwnerAccessExpr(var, dot, acces, args);
                             break;
+
+                        default:
+                            expr = new CardPropertyAccesExpr(var, dot, acces, args);
+                            break;
                     }
 
                     if (Match(TokenSubtypes.Dot))
@@ -314,6 +318,9 @@ public partial class Parser
 
                     return expr;
                 }
+
+                else GenerateError("Expression expected", Peek().Location); // Si ninguno de los casos coincide, significa que estamos sentados sobre un token que no puede iniciar una expresión
+                Synchronize(new List<TokenSubtypes> { TokenSubtypes.Semicolon, TokenSubtypes.Comma, TokenSubtypes.CloseBrace});
 
             }
 
@@ -336,7 +343,7 @@ public partial class Parser
         if (Match(TokenSubtypes.Find))
         {
             Token method = Previous();
-            Consume(TokenSubtypes.OpenParenthesis, "Expected '('", new List<TokenSubtypes>{TokenSubtypes.CloseParenthesis});
+            Consume(TokenSubtypes.OpenParenthesis, "Expected '('", new List<TokenSubtypes> { TokenSubtypes.CloseParenthesis });
             IExpression? args = Expression();
             Consume(TokenSubtypes.CloseParenthesis, "Expected ')'", null);
             return new FindMethodExpr(access, method, args);
@@ -345,7 +352,7 @@ public partial class Parser
         if (Match(TokenSubtypes.Push))
         {
             Token method = Previous();
-            Consume(TokenSubtypes.OpenParenthesis, "Expected '('", new List<TokenSubtypes>{TokenSubtypes.CloseParenthesis});
+            Consume(TokenSubtypes.OpenParenthesis, "Expected '('", new List<TokenSubtypes> { TokenSubtypes.CloseParenthesis });
             IExpression? args = Expression();
             Consume(TokenSubtypes.CloseParenthesis, "Expected ')'", null);
             return new PushMethodExpr(access, method, args);
@@ -354,7 +361,7 @@ public partial class Parser
         if (Match(TokenSubtypes.SendBottom))
         {
             Token method = Previous();
-            Consume(TokenSubtypes.OpenParenthesis, "Expected '('", new List<TokenSubtypes>{TokenSubtypes.CloseParenthesis});
+            Consume(TokenSubtypes.OpenParenthesis, "Expected '('", new List<TokenSubtypes> { TokenSubtypes.CloseParenthesis });
             IExpression? args = Expression();
             Consume(TokenSubtypes.CloseParenthesis, "Expected ')'", null);
             return new SendBottomMethodExpr(access, method, args);
@@ -363,7 +370,7 @@ public partial class Parser
         if (Match(TokenSubtypes.Pop))
         {
             Token method = Previous();
-            Consume(TokenSubtypes.OpenParenthesis, "Expected '('", new List<TokenSubtypes>{TokenSubtypes.CloseParenthesis});
+            Consume(TokenSubtypes.OpenParenthesis, "Expected '('", new List<TokenSubtypes> { TokenSubtypes.CloseParenthesis });
             Consume(TokenSubtypes.CloseParenthesis, "Expected ')'", null);
             return new PopMethodExpr(access, method, null);
         }
@@ -371,7 +378,7 @@ public partial class Parser
         if (Match(TokenSubtypes.Remove))
         {
             Token method = Previous();
-            Consume(TokenSubtypes.OpenParenthesis, "Expected '('", new List<TokenSubtypes>{TokenSubtypes.CloseParenthesis});
+            Consume(TokenSubtypes.OpenParenthesis, "Expected '('", new List<TokenSubtypes> { TokenSubtypes.CloseParenthesis });
             IExpression? args = Expression();
             Consume(TokenSubtypes.CloseParenthesis, "Expected ')'", null);
             return new RemoveMethodExpr(access, method, args);
@@ -380,7 +387,7 @@ public partial class Parser
         if (Match(TokenSubtypes.Shuffle))
         {
             Token method = Previous();
-            Consume(TokenSubtypes.OpenParenthesis, "Expected '('", new List<TokenSubtypes>{TokenSubtypes.CloseParenthesis});
+            Consume(TokenSubtypes.OpenParenthesis, "Expected '('", new List<TokenSubtypes> { TokenSubtypes.CloseParenthesis });
             Consume(TokenSubtypes.CloseParenthesis, "Expected ')'", null);
             return new ShuffleMethodExpr(access, method, null);
         }

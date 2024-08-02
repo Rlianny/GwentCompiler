@@ -140,6 +140,8 @@ public abstract class ContextAccessExpr : IExpression
     }
 }
 
+public class CardPropertyAccesExpr(Variable variable, Token dot, Token acces, IExpression? args) : ContextAccessExpr(variable, dot, acces, args);
+
 public class TriggerPlayerAccessExpr(Variable variable, Token dot, Token acces, IExpression? args) : ContextAccessExpr(variable, dot, acces, args);
 
 public class BoardAccessExpr(Variable variable, Token dot, Token acces, IExpression? args) : ContextAccessExpr(variable, dot, acces, args);
