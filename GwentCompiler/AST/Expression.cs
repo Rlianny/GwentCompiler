@@ -1,51 +1,62 @@
 namespace GwentCompiler;
-public interface IExpression : IASTNode
-{
+public interface IExpression : IASTNode;
 
+public abstract class BinaryExpression(IExpression? left, Token op, IExpression? rigth) : object(), IExpression
+{
+    public IExpression? Left { get; private set; } = left;
+    public IExpression? Right { get; private set; } = rigth;
+    public Token Operator { get; private set; } = op;
 }
 
-public abstract class BinaryExpression : IExpression
+public abstract class UnaryExpression(Token op, IExpression? rigth) : IExpression
 {
-    public IExpression? Left { get; private set; }
-    public IExpression? Right { get; private set; }
-    public Token Operator { get; private set; }
-    public BinaryExpression(IExpression? left, Token op, IExpression? rigth) : base()
-    {
-        Left = left;
-        Right = rigth;
-        Operator = op;
-    }
+    public IExpression? Rigth { get; private set; } = rigth;
+    public Token Operator { get; private set; } = op;
 }
 
-public abstract class UnaryExpression : IExpression
+public class GroupExpression(IExpression? expr) : IExpression
 {
-    public IExpression? Rigth { get; private set; }
-    public Token Operator { get; private set; }
-    public UnaryExpression(Token op, IExpression? rigth)
-    {
-        Rigth = rigth;
-        Operator = op;
-    }
+    public IExpression? Expression { get; private set; } = expr;
 }
 
-public class GroupExpression : IExpression
+public abstract class Atom(Token? value) : IExpression
 {
-    public IExpression? Expression { get; private set; }
-    public GroupExpression(IExpression? expr)
-    {
-        Expression = expr;
-    }
+    public Token? Value { get; private set; } = value;
 }
 
-public abstract class Atom : IExpression
+public class Variable(Token value) : IExpression
 {
-    public Token? Value { get; private set; }
-    public Atom(Token? value)
-    {
-        Value = value;
-    }
+    public Token Value { get; private set; } = value;
 }
 
+public class AssignmentExpr(Variable? name, IExpression? value) : IExpression
+{
+    public Variable? Name { get; private set; } = name;
+    public IExpression? Value { get; private set; } = value;
+}
+
+public class IncrementOrDecrementOperationExpr(Token op, Variable? rigth) : IExpression
+{
+    public Variable? Name { get; private set; } = rigth;
+    public Token Operation { get; private set; } = op;
+}
+
+public abstract class ContextAccessExpr(Variable variable, Token dot, Token acces, IExpression? args) : IExpression
+{
+    public Token Dot { get; private set; } = dot;
+    public Variable Variable { get; private set; } = variable;
+    public Token Acces { get; private set; } = acces;
+    public IExpression? Args { get; private set; } = args;
+}
+
+public abstract class ContextMethodsExpr(IExpression? contextAccessExpr, Token method, IExpression? args) : IExpression
+{
+    public IExpression? AccessExpression { get; private set; } = contextAccessExpr;
+    public Token Method { get; private set; } = method;
+    public IExpression? Args { get; private set; } = args;
+}
+
+#region BinaryExpressionSubtypes
 public abstract class ArithmeticBinaryExpression(IExpression? left, Token op, IExpression? rigth) : BinaryExpression(left, op, rigth);
 
 public abstract class BooleanOperationBinaryExpression(IExpression? left, Token op, IExpression? rigth) : BinaryExpression(left, op, rigth);
@@ -82,63 +93,25 @@ public class DivisionExpr(IExpression? left, Token op, IExpression? rigth) : Ari
 
 public class PowerExpr(IExpression? left, Token op, IExpression? rigth) : ArithmeticBinaryExpression(left, op, rigth);
 
+#endregion
+
+#region UnaryExpressionSubtypes
 public class NegatedExpr(Token op, IExpression? rigth) : UnaryExpression(op, rigth);
 
 public class Substraction(Token op, IExpression? rigth) : UnaryExpression(op, rigth);
 
+#endregion
+
+#region AtomicExpressionSubtypes
 public class NumericLiteral(Token? value) : Atom(value);
 
 public class StringLiteral(Token? value) : Atom(value);
 
 public class BooleanLiteral(Token? value) : Atom(value);
 
-public class Variable : IExpression
-{
-    public Token? Value { get; private set; }
+# endregion
 
-    public Variable(Token? value)
-    {
-        Value = value;
-    }
-}
-
-public class AssignmentExpr : IExpression
-{
-    public Variable? Name { get; private set; }
-    public IExpression? Value { get; private set; }
-    public AssignmentExpr(Variable? name, IExpression? value)
-    {
-        Name = name;
-        Value = value;
-    }
-}
-
-public class IncrementOrDecrementOperationExpr : IExpression
-{
-    public Variable? Name {get; private set;}
-    public Token Operation {get; private set;} 
-
-    public IncrementOrDecrementOperationExpr(Token op, Variable? rigth)
-    {
-        Operation = op;
-        Name = rigth;
-    }
-}
-
-public abstract class ContextAccessExpr : IExpression
-{
-    public Token Dot { get; private set; }
-    public Variable Variable { get; private set; }
-    public Token Acces { get; private set;}
-    public IExpression? Args{get; private set;}
-    public ContextAccessExpr(Variable variable, Token dot, Token acces, IExpression? args)
-    {
-        Variable = variable;
-        Dot = dot;
-        Acces = acces;
-        Args = args;
-    }
-}
+#region ContextAccessExpressionSubtypes
 
 public class CardPropertyAccesExpr(Variable variable, Token dot, Token acces, IExpression? args) : ContextAccessExpr(variable, dot, acces, args);
 
@@ -156,18 +129,9 @@ public class DeckOfPlayerAccessExpr(Variable variable, Token dot, Token acces, I
 
 public class CardOwnerAccessExpr(Variable variable, Token dot, Token acces, IExpression? args) : ContextAccessExpr(variable, dot, acces, args);
 
-public class ContextMethodsExpr : IExpression
-{
-    public IExpression? AccessExpression { get; private set; }
-    public Token Method { get; private set; }
-    public IExpression? Args{get; private set;}
-    public ContextMethodsExpr(IExpression? contextAccessExpr, Token method, IExpression? args)
-    {
-        AccessExpression = contextAccessExpr;
-        Method = method;
-        Args = args;
-    }
-}
+#endregion
+
+#region ContextMethodExpressionSyptypes
 
 public class FindMethodExpr(IExpression? acces, Token method, IExpression? args) : ContextMethodsExpr(acces, method, args);
 
@@ -180,3 +144,5 @@ public class PopMethodExpr(IExpression? acces, Token method, IExpression? args) 
 public class RemoveMethodExpr(IExpression? acces, Token method, IExpression? args) : ContextMethodsExpr(acces, method, args);
 
 public class ShuffleMethodExpr(IExpression? acces, Token method, IExpression? args) : ContextMethodsExpr(acces, method, args);
+
+#endregion

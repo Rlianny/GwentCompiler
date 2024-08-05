@@ -1,6 +1,3 @@
 namespace GwentCompiler;
 
-public class CompiledEffect : CompiledObject
-{
-    
-}
+public class CompiledEffect : CompiledObject;

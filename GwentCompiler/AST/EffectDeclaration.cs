@@ -1,6 +1,3 @@
 namespace GwentCompiler;
 
-public class EffectDeclaration() : IProgramNode
-{
-
-}
+public class EffectDeclaration() : IProgramNode;

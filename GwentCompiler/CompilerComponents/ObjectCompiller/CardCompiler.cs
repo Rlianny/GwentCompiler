@@ -33,6 +33,7 @@ public partial class ObjectCompiller
         double power = 0;
         if (node.Power != null && interpreter.Interpret(node.Power) is double intPower) power = intPower;
 
+        if(cardType != null && cardName != null && cardFaction != null && range != null && onAct != null && eff)
         return new CompiledCard(cardType, cardName, cardFaction, range, onAct, effectDescription, (int)power, characterDescription, quote);
 
     }

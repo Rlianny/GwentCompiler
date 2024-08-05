@@ -1,4 +1,2 @@
-public interface IProgramNode : IASTNode
-{
-    
-}
+namespace GwentCompiler;
+public interface IProgramNode : IASTNode;

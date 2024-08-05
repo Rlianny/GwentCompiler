@@ -114,7 +114,7 @@ public partial class Interpreter : VisitorBase<Object>
 
         bool melee = false, ranged = false, siege = false;
 
-        foreach (IExpression expression in declaration.Ranges)
+        foreach (IExpression? expression in declaration.Ranges)
         {
             var value = Evaluate(expression);
 
@@ -161,7 +161,9 @@ public partial class Interpreter : VisitorBase<Object>
 
         foreach (var activation in onActivation.Activations)
         {
-            effects.Add((EffectActivation)Visit(activation, true));
+            object? newActivation = Visit(activation, true);
+            if (newActivation != null)
+                effects.Add((EffectActivation)newActivation);
         }
 
         return effects;
@@ -216,7 +218,7 @@ public partial class Interpreter : VisitorBase<Object>
                     else throw new RuntimeError("Invalid parameter declaration, the effect does not contains this parameter", activationParam.VarName.Value.Location);
                 }
 
-                if(Effect.AllEffects[stringName].Parameters.Count != parameter.Count) throw new RuntimeError("Invalid parameter declaration, faltan parametros", data.Effect.ActivationParams[0].Colon.Location);
+                if (Effect.AllEffects[stringName].Parameters.Count != parameter.Count) throw new RuntimeError("Invalid parameter declaration, faltan parametros", data.Effect.ActivationParams[0].Colon.Location);
                 Params = parameter;
             }
 
@@ -258,7 +260,9 @@ public partial class Interpreter : VisitorBase<Object>
 
         if (data.PostAction != null)
         {
-            postAction = (EffectActivation)Visit(data.PostAction.LinkedEffect, false);
+            object? post = Visit(data.PostAction.LinkedEffect, false);
+            if (post != null)
+                postAction = (EffectActivation)post;
         }
 
         return new EffectActivation(effectName, Params, selectorSource, selectorSingle, postAction);
