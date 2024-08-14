@@ -118,9 +118,9 @@ public partial class Parser
 
     private void Synchronize(List<TokenSubtypes>? synchronizer)
     {   
+        if(synchronizer == null) return; 
         Advance();
         
-        if(synchronizer == null) return; 
 
         while (!IsAtEnd())
         {

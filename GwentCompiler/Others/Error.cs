@@ -55,7 +55,7 @@ public interface IErrorReporter
 public class RuntimeError : Exception
 {
     public CodeLocation CodeLocation {get; private set;}
-    public RuntimeError(string message, CodeLocation location) : base(message)
+    public RuntimeError(string message, CodeLocation location) : base($"Error: {message} in row {location.Row}, column {location.Column}.")
     {
         CodeLocation = location;
     }

@@ -11,13 +11,13 @@ public partial class Interpreter : VisitorBase<Object>
             if (stringType == "Oro" || stringType == "Plata" || stringType == "Líder") return value;
             else
             {
-                throw new RuntimeError("Invalid type declaration, only the following types are accepted: 'Oro', 'Plata', 'Líder'", declaration.Operator.Location);
+                throw new RuntimeError("Invalid type declaration, 'Oro', 'Plata' or 'Líder' was expected", declaration.Operator.Location);
             }
         }
 
         else
         {
-            throw new RuntimeError("The type must to be a string value", declaration.Operator.Location);
+            throw new RuntimeError("The 'Type' must be a string value", declaration.Operator.Location);
         }
     }
 
@@ -31,7 +31,7 @@ public partial class Interpreter : VisitorBase<Object>
         }
         else
         {
-            throw new RuntimeError("The name must to be a string value", declaration.Operator.Location);
+            throw new RuntimeError("The 'Name' must be a string value", declaration.Operator.Location);
         }
     }
 
@@ -45,7 +45,7 @@ public partial class Interpreter : VisitorBase<Object>
         }
         else
         {
-            throw new RuntimeError("The faction must to be a string value", declaration.Operator.Location);
+            throw new RuntimeError("The 'Faction' must be a string value", declaration.Operator.Location);
         }
     }
 
@@ -58,11 +58,11 @@ public partial class Interpreter : VisitorBase<Object>
             if (intPower > 0)
                 return intPower;
 
-            else throw new RuntimeError("The power must to be a positive integer value", declaration.Operator.Location);
+            else throw new RuntimeError("The 'Power' must be a positive numeric value", declaration.Operator.Location);
         }
         else
         {
-            throw new RuntimeError("The power must to be a integer value", declaration.Operator.Location);
+            throw new RuntimeError("The 'Power' must to be a numeric value", declaration.Operator.Location);
         }
     }
 
@@ -76,7 +76,7 @@ public partial class Interpreter : VisitorBase<Object>
         }
         else
         {
-            throw new RuntimeError("The effect description must to be a string value", declaration.Operator.Location);
+            throw new RuntimeError("The 'Effect Description' must be a string value", declaration.Operator.Location);
         }
     }
 
@@ -90,7 +90,7 @@ public partial class Interpreter : VisitorBase<Object>
         }
         else
         {
-            throw new RuntimeError("The character description must to be a string value", declaration.Operator.Location);
+            throw new RuntimeError("The 'Character Description' must be a string value", declaration.Operator.Location);
         }
     }
 
@@ -104,7 +104,7 @@ public partial class Interpreter : VisitorBase<Object>
         }
         else
         {
-            throw new RuntimeError("The quote must be a string value", declaration.Operator.Location);
+            throw new RuntimeError("The 'Quote' must be a string value", declaration.Operator.Location);
         }
     }
 
@@ -144,11 +144,11 @@ public partial class Interpreter : VisitorBase<Object>
                     continue;
                 }
 
-                throw new RuntimeError("The range is not valid, only the ranks 'melee', 'siege' and 'ranged' are accepted", declaration.Operator.Location);
+                throw new RuntimeError("Invalid 'Range' declaration, only the ranges 'Melee', 'Siege' and 'Ranged' are accepted", declaration.Operator.Location);
             }
             else
             {
-                throw new RuntimeError("The range must be a string value", declaration.Operator.Location);
+                throw new RuntimeError("The 'Range' must be a string value", declaration.Operator.Location);
             }
         }
 
@@ -179,7 +179,7 @@ public partial class Interpreter : VisitorBase<Object>
 
         var name = Evaluate(data.Effect.EffectName);
         if (name is string stringName) effectName = stringName;
-        else throw new RuntimeError("The name must be a string value", data.Effect.Colon.Location);
+        else throw new RuntimeError("The 'Name' must be a string value", data.Effect.Colon.Location);
 
         if (Effect.AllEffects.ContainsKey(stringName))
         {
@@ -215,16 +215,16 @@ public partial class Interpreter : VisitorBase<Object>
 
                     if (Effect.AllEffects[stringName].Parameters.Contains(newParam)) parameter.Add(newParam, paramValue);
 
-                    else throw new RuntimeError("Invalid parameter declaration, the effect does not contains this parameter", activationParam.VarName.Value.Location);
+                    else throw new RuntimeError("Invalid parameter declaration, this effect does not contain this parameter", activationParam.VarName.Value.Location);
                 }
 
-                if (Effect.AllEffects[stringName].Parameters.Count != parameter.Count) throw new RuntimeError("Invalid parameter declaration, faltan parametros", data.Effect.ActivationParams[0].Colon.Location);
+                if (Effect.AllEffects[stringName].Parameters.Count != parameter.Count) throw new RuntimeError("Invalid parameter declaration, there are still parameters to declare", data.Effect.ActivationParams[0].Colon.Location);
                 Params = parameter;
             }
 
             else if (Effect.AllEffects[stringName].Parameters == null) Params = null;
 
-            else throw new RuntimeError("Params must be declared", data.Effect.Colon.Location);
+            else throw new RuntimeError("Parameters must be declared", data.Effect.Colon.Location);
         }
 
         else throw new RuntimeError("The effect must be declared before", data.Effect.Colon.Location);
@@ -237,17 +237,17 @@ public partial class Interpreter : VisitorBase<Object>
             {
                 if (stringSource == "board" || stringSource == "hand" || stringSource == "otherHand" || stringSource == "deck" || stringSource == "otherDeck" || stringSource == "field" || stringSource == "parent" && isRoot == false) selectorSource = stringSource;
 
-                else throw new RuntimeError("Inavlid source declaration", data.Selector.Source.Operator.Location);
+                else throw new RuntimeError("Invalid source declaration", data.Selector.Source.Operator.Location);
             }
-            else throw new RuntimeError("The source must be a string value", data.Selector.Source.Operator.Location);
+            else throw new RuntimeError("The 'Source' must be a string value", data.Selector.Source.Operator.Location);
 
             var single = Evaluate(data.Selector.Single.Single);
 
             if (single is bool booleanSingle) selectorSingle = booleanSingle;
 
-            else throw new RuntimeError("The single must to be a boolean value", data.Selector.Single.Operator.Location);
+            else throw new RuntimeError("The 'Single' must to be a boolean value", data.Selector.Single.Operator.Location);
 
-            //comprobación de predicate
+            //Predicate Verification
         }
 
         else if (isRoot == false)
@@ -256,7 +256,7 @@ public partial class Interpreter : VisitorBase<Object>
             selectorSingle = null;
         }
 
-        else throw new RuntimeError("The Selector must be declared", data.Effect.Colon.Location);
+        else throw new RuntimeError("The 'Selector' must be declared", data.Effect.Colon.Location);
 
         if (data.PostAction != null)
         {

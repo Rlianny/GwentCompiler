@@ -65,7 +65,7 @@ public partial class Interpreter : VisitorBase<Object>
     }
     #endregion
 
-    #region Auxiliar Methods
+    #region Auxiliary Methods
 
     private string Stringify(Object? obj)
     {

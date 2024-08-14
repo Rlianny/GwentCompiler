@@ -10,3 +10,15 @@
 /home/lianny/$/home/lianny/Proyecto/ProyectoGwent++/Compiler/GwentCompiler/obj/Debug/net8.0/GwentCompiler.pdb
 /home/lianny/$/home/lianny/Proyecto/ProyectoGwent++/Compiler/GwentCompiler/obj/Debug/net8.0/ref/GwentCompiler.dll
 /home/lianny/$/home/lianny/Proyecto/ProyectoGwent++/Compiler/GwentCompiler/obj/Debug/net8.0/GwentCompiler.sourcelink.json
+C:\Lianny\Proyectos\Gwent++\Compiler\GwentCompiler\bin\Debug\net8.0\GwentCompiler.deps.json
+C:\Lianny\Proyectos\Gwent++\Compiler\GwentCompiler\bin\Debug\net8.0\GwentCompiler.dll
+C:\Lianny\Proyectos\Gwent++\Compiler\GwentCompiler\bin\Debug\net8.0\GwentCompiler.pdb
+C:\Lianny\Proyectos\Gwent++\Compiler\GwentCompiler\obj\Debug\net8.0\GwentCompiler.GeneratedMSBuildEditorConfig.editorconfig
+C:\Lianny\Proyectos\Gwent++\Compiler\GwentCompiler\obj\Debug\net8.0\GwentCompiler.AssemblyInfoInputs.cache
+C:\Lianny\Proyectos\Gwent++\Compiler\GwentCompiler\obj\Debug\net8.0\GwentCompiler.AssemblyInfo.cs
+C:\Lianny\Proyectos\Gwent++\Compiler\GwentCompiler\obj\Debug\net8.0\GwentCompiler.csproj.CoreCompileInputs.cache
+C:\Lianny\Proyectos\Gwent++\Compiler\GwentCompiler\obj\Debug\net8.0\GwentCompiler.sourcelink.json
+C:\Lianny\Proyectos\Gwent++\Compiler\GwentCompiler\obj\Debug\net8.0\GwentCompiler.dll
+C:\Lianny\Proyectos\Gwent++\Compiler\GwentCompiler\obj\Debug\net8.0\refint\GwentCompiler.dll
+C:\Lianny\Proyectos\Gwent++\Compiler\GwentCompiler\obj\Debug\net8.0\GwentCompiler.pdb
+C:\Lianny\Proyectos\Gwent++\Compiler\GwentCompiler\obj\Debug\net8.0\ref\GwentCompiler.dll

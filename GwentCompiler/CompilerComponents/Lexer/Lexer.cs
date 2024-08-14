@@ -53,7 +53,7 @@ public class Lexer : IErrorReporter
             if (!Match)
             {
                 Advance(input);
-                GenerateError("Unespected symbol", new CodeLocation(row, current + 1));
+                GenerateError("Unexpected symbol", new CodeLocation(row, current + 1));
             }
         }
     }

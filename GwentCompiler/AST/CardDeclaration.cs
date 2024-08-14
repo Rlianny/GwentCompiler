@@ -1,5 +1,5 @@
 namespace GwentCompiler;
-public class CardDeclaration : IProgramNode
+public class CardDeclaration(Token cardLocation) : IProgramNode
 {
     public CardTypeDeclaration? Type { get; private set; }
     public CardNameDeclaration? Name { get; private set; }
@@ -10,9 +10,12 @@ public class CardDeclaration : IProgramNode
     public OnActivation? OnActivationField { get; private set; }
     public CardCharacterDescriptionDeclaration? CharacterDescription { get; private set; }
     public CardQuoteDeclaration? Quote { get; private set; }
+    public Token CardLocation { get; private set; } = cardLocation;
 
     public bool SetComponent(CardComponent component)
     {
+        if (component == null) return true;
+        
         switch (component.GetType().Name)
         {
             case "CardTypeDeclaration":

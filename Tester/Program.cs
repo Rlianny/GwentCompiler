@@ -14,10 +14,13 @@ static class Program
 
     static void Main()
     {
-        string path = GetFileContent("/home/lianny/$/home/lianny/Proyecto/ProyectoGwent++/Compiler/TestFile/Input.txt");
+        string path = GetFileContent("/Lianny/Proyectos/Gwent++/Compiler/TestFile/Input.txt");
 
-        Effect effect = new Effect("Holiwis", new List<Parameter>(){new Parameter("Amount", ValueType.Number), new Parameter("Card", ValueType.String)});
-        Effect.AllEffects.Add("Holiwis", effect);
+        Effect effect = new Effect("Damage", new List<Parameter>(){new Parameter("Amount", ValueType.Number)});
+        Effect.AllEffects.Add(effect.Name, effect);
+
+        Effect effect1 = new Effect("ReturnToDeck", null);
+        Effect.AllEffects.Add(effect1.Name, effect1);
 
         Compile(path);
     }
@@ -63,7 +66,7 @@ static class Program
         //     return;
         // }
 
-        ObjectCompiller objectCompiller = new ObjectCompiller(program);
+        ObjectCompiler objectCompiller = new ObjectCompiler(program);
         List<CompiledObject> compiledObjects = objectCompiller.CompileObjects();
         foreach(var obj in compiledObjects)
         {

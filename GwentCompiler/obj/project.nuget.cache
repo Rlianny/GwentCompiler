@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "8jzPskTWI+9DRlIQIXd63saYQ9dpJquE6vAu0CKJ3cgXKI13un3L5O4lAhrzD7MH/g37dlQwNyytleoL1pFm3Q==",
+  "dgSpecHash": "irFPTgVKlLw=",
   "success": true,
-  "projectFilePath": "/home/lianny/$/home/lianny/Proyecto/ProyectoGwent++/Compiler/GwentCompiler/GwentCompiler.csproj",
+  "projectFilePath": "C:\\Lianny\\Proyectos\\Gwent++\\Compiler\\GwentCompiler\\GwentCompiler.csproj",
   "expectedPackageFiles": [],
   "logs": []
 }

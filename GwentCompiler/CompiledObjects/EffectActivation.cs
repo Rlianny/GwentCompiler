@@ -19,7 +19,7 @@ public class EffectActivation
         PostAction = postAction;
     }
 
-    public void Excecute()
+    public void Execute()
     {
 
     }

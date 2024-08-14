@@ -1,6 +1,6 @@
 namespace GwentCompiler;
 
-public partial class ObjectCompiller
+public partial class ObjectCompiler
 {
     private CompiledCard GetCompiledCard(CardDeclaration node)
     {
@@ -30,11 +30,13 @@ public partial class ObjectCompiller
         string? quote = null;
         if (node.Quote != null && interpreter.Interpret(node.Quote) is string stringQuote) quote = stringQuote;
 
-        double power = 0;
+        double? power = null;
         if (node.Power != null && interpreter.Interpret(node.Power) is double intPower) power = intPower;
 
-        if(cardType != null && cardName != null && cardFaction != null && range != null && onAct != null && eff)
+        if(cardType != null && cardName != null && cardFaction != null && range != null && onAct != null && effectDescription != null && power != null && characterDescription != null && quote != null) 
         return new CompiledCard(cardType, cardName, cardFaction, range, onAct, effectDescription, (int)power, characterDescription, quote);
+
+        else throw new RuntimeError("Missing card fields", node.CardLocation.Location);
 
     }
 

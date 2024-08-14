@@ -20,7 +20,7 @@ public static class ASTPrinter
         {
             idt++;
             System.Console.WriteLine(space + un.Operator.ToString());
-            Print(un.Rigth, idt);
+            Print(un.Right, idt);
         }
 
         else if (expr is Atom atom)
@@ -39,7 +39,7 @@ public static class ASTPrinter
             idt++;
             System.Console.WriteLine(space + ".");
             Console.WriteLine(accessExpr.Variable.Value.Lexeme);
-            Console.WriteLine(accessExpr.Acces.Lexeme);
+            Console.WriteLine(accessExpr.Access.Lexeme);
         }
 
         else if (expr is ContextMethodsExpr call)

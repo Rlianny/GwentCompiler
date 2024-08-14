@@ -1,9 +1,9 @@
 namespace GwentCompiler;
 
-public partial class ObjectCompiller : VisitorBase<object>
+public partial class ObjectCompiler : VisitorBase<object>
 {
     private List<IProgramNode?> nodes;
-    public ObjectCompiller(List<IProgramNode?> nodes)
+    public ObjectCompiler(List<IProgramNode?> nodes)
     {
         this.nodes = nodes;
     }  
@@ -15,7 +15,17 @@ public partial class ObjectCompiller : VisitorBase<object>
         foreach(var node in nodes)
         {
             if(node is CardDeclaration cardDeclaration)
-            compiledObjects.Add(GetCompiledCard(cardDeclaration));
+            {
+                try
+                {
+                    compiledObjects.Add(GetCompiledCard(cardDeclaration));
+                }
+                catch (RuntimeError ex)
+                {
+                    hadError = true;
+                    Console.WriteLine(ex.Message);
+                }
+            }
         }
 
         return compiledObjects;

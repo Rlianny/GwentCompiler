@@ -1,0 +1,34 @@
+card
+{
+    Name: "Lianny",
+    Type: "Plata",
+    Faction: "Ch"@"a"@"m"@"a"@"s",
+    Power: 9.0,
+    Range: ["Melee"],
+    OnActivation:
+    [{
+ Effect:
+        {
+            Name: "Damage",
+            Amount: 5 * 8.1,
+        },
+        Selector:
+        {
+            Source: "hand",
+            Single: true,
+            Predicate: (unit) => unit.Faction == "Chamas"
+        },
+        PostAction:
+        {
+            Type: "ReturnToDeck",
+            PostAction: 
+            {
+                Type: "ReturnToDeck",
+            }
+        }
+    }   
+    ]
+    CharacterDescription: "Linda y pelirriza",
+    EffectDescription: "Matatana",
+    Quote: "Verga",
+}

@@ -18,10 +18,10 @@ public class OnActivation(List<ActivationData> data, Token op) : CardComponent
     public Token Operator { get; private set; } = op;
     public List<ActivationData> Activations = data;
 }
-public class ActivationData(EffectInfo effect, Selector selector, PostAction postAction) : CardComponent
+public class ActivationData(EffectInfo effect, Selector? selector, PostAction postAction) : CardComponent
 {
     public EffectInfo Effect = effect;
-    public Selector Selector = selector;
+    public Selector? Selector = selector;
     public PostAction PostAction = postAction;
 }
 
@@ -65,11 +65,9 @@ public class SelectorSingle(IExpression single, Token op)
     public Token Operator { get; private set; } = op;
 }
 
-public class SelectorPredicate(Variable variable, Token lambda, IExpression expression)
+public class SelectorPredicate(LambdaExpr expression)
 {
-    public Variable Variable { get; private set; } = variable;
-    public Token Lambda { get; private set; } = lambda;
-    public IExpression Expression { get; private set; } = expression;
+    public LambdaExpr LambdaExpression { get; private set; } = expression;
 }
 
 public class PostAction(ActivationData linkedEffect)

@@ -4,7 +4,8 @@ public partial class Parser
 {
     private IProgramNode? Card()
     {
-        CardDeclaration parsedCard = new();
+        Token cardLocation = Previous();
+        CardDeclaration parsedCard = new(cardLocation);
 
         Consume(TokenSubtypes.OpenBrace, "Card must declare a body", new List<TokenSubtypes> { TokenSubtypes.CloseBrace });
         while (!Match(TokenSubtypes.CloseBrace))
@@ -22,7 +23,6 @@ public partial class Parser
                 {
                     GenerateError("The card type has been defined before", Previous().Location);
                     Synchronize(new List<TokenSubtypes> { TokenSubtypes.Comma });
-                    break;
                 }
                 continue;
             }
@@ -31,18 +31,11 @@ public partial class Parser
             {
                 CardComponent? value = GenericField();
                 if (value == null)
-                {
                     GenerateError("The card must to declare a name", Previous().Location);
-                    Synchronize(new List<TokenSubtypes> { TokenSubtypes.Comma });
-                    return null;
-                }
 
                 if (!parsedCard.SetComponent(value))
-                {
                     GenerateError("The card name has been defined before", Previous().Location);
-                    Synchronize(new List<TokenSubtypes> { TokenSubtypes.Comma });
-                    break;
-                }
+
                 continue;
             }
 
@@ -50,17 +43,11 @@ public partial class Parser
             {
                 CardComponent? value = GenericField();
                 if (value == null)
-                {
                     GenerateError("The card must to declare a faction", Previous().Location);
-                    Synchronize(new List<TokenSubtypes> { TokenSubtypes.Comma });
-                    return null;
-                }
+                    
                 if (!parsedCard.SetComponent(value))
-                {
                     GenerateError("The card faction has been defined before", Previous().Location);
-                    Synchronize(new List<TokenSubtypes> { TokenSubtypes.Comma });
-                    break;
-                }
+
                 continue;
             }
 
@@ -68,17 +55,11 @@ public partial class Parser
             {
                 CardComponent? value = CardRange();
                 if (value == null)
-                {
                     GenerateError("The card must to declare a range", Previous().Location);
-                    Synchronize(new List<TokenSubtypes> { TokenSubtypes.Comma });
-                    return null;
-                }
+        
                 if (!parsedCard.SetComponent(value))
-                {
                     GenerateError("The card range has been defined before", Previous().Location);
-                    Synchronize(new List<TokenSubtypes> { TokenSubtypes.Comma });
-                    break;
-                }
+                   
                 continue;
             }
 
@@ -86,17 +67,11 @@ public partial class Parser
             {
                 CardComponent? value = GenericField();
                 if (value == null)
-                {
                     GenerateError("The card must to declare a power", Previous().Location);
-                    Synchronize(new List<TokenSubtypes> { TokenSubtypes.Comma });
-                    return null;
-                }
+                    
                 if (!parsedCard.SetComponent(value))
-                {
                     GenerateError("The card power has been defined before", Previous().Location);
-                    Synchronize(new List<TokenSubtypes> { TokenSubtypes.Comma });
-                    break;
-                }
+                    
                 continue;
             }
 
@@ -104,17 +79,11 @@ public partial class Parser
             {
                 CardComponent? value = OnActivation();
                 if (value == null)
-                {
                     GenerateError("The card must to declare a OnActivation field", Previous().Location);
-                    Synchronize(new List<TokenSubtypes> { TokenSubtypes.CloseBracket });
-                    return null;
-                }
+
                 if (!parsedCard.SetComponent(value))
-                {
                     GenerateError("The card OnActivation field has been defined before", Previous().Location);
-                    Synchronize(new List<TokenSubtypes> { TokenSubtypes.CloseBracket });
-                    break;
-                }
+                    
                 continue;
             }
 
@@ -122,17 +91,11 @@ public partial class Parser
             {
                 CardComponent? value = GenericField();
                 if (value == null)
-                {
                     GenerateError("The card must to declare a effect description", Previous().Location);
-                    Synchronize(new List<TokenSubtypes> { TokenSubtypes.Comma });
-                    return null;
-                }
+                    
                 if (!parsedCard.SetComponent(value))
-                {
                     GenerateError("The effect description has been defined before", Previous().Location);
-                    Synchronize(new List<TokenSubtypes> { TokenSubtypes.Comma });
-                    break;
-                }
+        
                 continue;
             }
 
@@ -140,17 +103,11 @@ public partial class Parser
             {
                 CardComponent? value = GenericField();
                 if (value == null)
-                {
                     GenerateError("The card must to declare a character description", Previous().Location);
-                    Synchronize(new List<TokenSubtypes> { TokenSubtypes.Comma });
-                    return null;
-                }
+                   
                 if (!parsedCard.SetComponent(value))
-                {
                     GenerateError("The character description has been defined before", Previous().Location);
-                    Synchronize(new List<TokenSubtypes> { TokenSubtypes.Comma });
-                    break;
-                }
+                    
                 continue;
             }
 
@@ -158,17 +115,11 @@ public partial class Parser
             {
                 CardComponent? value = GenericField();
                 if (value == null)
-                {
                     GenerateError("The card must to declare a quote", Previous().Location);
-                    Synchronize(new List<TokenSubtypes> { TokenSubtypes.Comma });
-                    return null;
-                }
+                   
                 if (!parsedCard.SetComponent(value))
-                {
                     GenerateError("The card quote has been defined before", Previous().Location);
-                    Synchronize(new List<TokenSubtypes> { TokenSubtypes.Comma });
-                    break;
-                }
+                    
                 continue;
             }
 
@@ -176,7 +127,6 @@ public partial class Parser
             break;
         }
 
-        //Consume(TokenSubtypes.OpenBrace, "Expect '}' after card body");
         return parsedCard;
 
     }
@@ -185,7 +135,6 @@ public partial class Parser
     {
         var component = Previous();
         Token? colon = Consume(TokenSubtypes.Colon, "Expected ':'", new List<TokenSubtypes> { TokenSubtypes.Comma });
-        if (colon == null) return null;
         IExpression? value = Expression();
 
         if (value == null) return null;
@@ -233,42 +182,54 @@ public partial class Parser
     private CardComponent? OnActivation()
     {
         Token? colon = Consume(TokenSubtypes.Colon, "Expected ':'", null);
-        Consume(TokenSubtypes.OpenBracket, "Expect '['", new List<TokenSubtypes> { TokenSubtypes.CloseBracket });
+        Token? openBracket = Consume(TokenSubtypes.OpenBracket, "Expect '['", null);
         List<ActivationData> data = new();
         while (!Match(TokenSubtypes.CloseBracket))
         {
-            data.Add(ActivationData());
+            ActivationData? activationData = ActivationData();
+            if(activationData != null)
+                data.Add(activationData);
+            else break;
         }
         return new OnActivation(data, colon);
 
     }
 
-    private ActivationData ActivationData()
+    private ActivationData? ActivationData()
     {
-        Consume(TokenSubtypes.OpenBrace, "Was expected '{'", null);
-        EffectInfo effectInfo = EffectInfo();
-        Selector selector = Selector();
+        var openBrace = Consume(TokenSubtypes.OpenBrace, "Was expected '{'", null);
+        EffectInfo? effectInfo = EffectInfo();
+        if (effectInfo == null) return null;
+        Selector? selector = Selector();
         PostAction postAction = PostAction();
-        Consume(TokenSubtypes.CloseBrace, "Was expected '}'", null);
+        var CloseBrace = Consume(TokenSubtypes.CloseBrace, "Was expected '}'", null);
 
         return new ActivationData(effectInfo, selector, postAction);
     }
 
-    private EffectInfo EffectInfo()
+    private EffectInfo? EffectInfo()
     {
-        Consume(TokenSubtypes.Effect, "Effect information declaration expected", new List<TokenSubtypes> { TokenSubtypes.CloseBrace });
+        var effect = Consume(TokenSubtypes.Effect, "Effect information declaration expected", new List<TokenSubtypes> { TokenSubtypes.CloseBracket });
+        if(effect == null) return null;
         Token? colon = Consume(TokenSubtypes.Colon, "Was expected ':'", null);
         IExpression? name = null;
         List<OnActivationParam?>? @params = new();
         if (Match(TokenSubtypes.OpenBrace))
         {
-            Consume(TokenSubtypes.Name, "Effect name expected", new List<TokenSubtypes> { TokenSubtypes.Comma });
+            var tokenName = Consume(TokenSubtypes.Name, "Effect name expected", new List<TokenSubtypes> { TokenSubtypes.Comma });
             Consume(TokenSubtypes.Colon, "Was expected ':'", null);
             name = Expression();
             Consume(TokenSubtypes.Comma, "Was expected ','", null);
             while (!Match(TokenSubtypes.CloseBrace))
             {
-                @params.Add(OnActivationParam());
+                OnActivationParam param = OnActivationParam();
+                if(param != null)
+                @params.Add(param);
+                else 
+                {
+                    Synchronize(new List<TokenSubtypes>() { TokenSubtypes.CloseBrace });
+                    break;
+                }
             }
             Consume(TokenSubtypes.Comma, "Was expected ','", null);
         }
@@ -286,7 +247,7 @@ public partial class Parser
         {
             Token? colon = Consume(TokenSubtypes.Colon, "Was expected ':'", null);
             IExpression? value = Expression();
-            Consume(TokenSubtypes.Comma, "Was expected ','", null);
+            Token? comma = Consume(TokenSubtypes.Comma, "Was expected ','", null);
             return new OnActivationParam(var, colon, value);
         }
         GenerateError("Was expected a variable", token.Location);
@@ -294,20 +255,21 @@ public partial class Parser
         return null;
     }
 
-    private Selector Selector()
+    private Selector? Selector()
     {
-        Consume(TokenSubtypes.Selector, "Effect selector declaration expected", new List<TokenSubtypes> { TokenSubtypes.CloseBrace });
+        var selector = Consume(TokenSubtypes.Selector, "Effect selector declaration expected", new List<TokenSubtypes>(){TokenSubtypes.CloseBracket});
+        if (selector == null) return null;
         Token? colon = Consume(TokenSubtypes.Colon, "Was expected ':'", null);
-        Consume(TokenSubtypes.OpenBrace, "Was expected '{'", null);
+        Token? openBrace = Consume(TokenSubtypes.OpenBrace, "Was expected '{'", null);
         SelectorSource source = Source();
         SelectorSingle? single = null;
         if (Match(TokenSubtypes.Single))
         {
             single = Single();
         }
-        SelectorPredicate predicate = Predicate();
-        Consume(TokenSubtypes.CloseBrace, "Was expected '}'", null);
-        Consume(TokenSubtypes.Comma, "Was expect ','", null);
+        SelectorPredicate? predicate = Predicate();
+        Token? openBrace1 = Consume(TokenSubtypes.CloseBrace, "Was expected '}'", null);
+        Token? comma = Consume(TokenSubtypes.Comma, "Was expect ','", null);
         return new Selector(source, single, predicate);
     }
 
@@ -324,24 +286,20 @@ public partial class Parser
     {
         Token? colon = Consume(TokenSubtypes.Colon, "Was expected ':'", null);
         IExpression single = Expression();
-        Consume(TokenSubtypes.Comma, "Was expected ','", null);
+        var comma = Consume(TokenSubtypes.Comma, "Was expected ','", null);
         return new SelectorSingle(single, colon);
     }
 
     public SelectorPredicate? Predicate()
     {
         Consume(TokenSubtypes.Predicate, "Predicate declaration expected", new List<TokenSubtypes> { TokenSubtypes.CloseBrace });
-        Consume(TokenSubtypes.Colon, "Was expected ':'", null);
-        var parenthesis = Consume(TokenSubtypes.OpenParenthesis, "Was expected '('", null);
+        Token? colon = Consume(TokenSubtypes.Colon, "Was expected ':'", null);
         var var = Expression();
-        if (var is Variable variable)
+        if (var is LambdaExpr lambdaExpr)
         {
-            Consume(TokenSubtypes.CloseParenthesis, "Was expected ')'", null);
-            var lambda = Consume(TokenSubtypes.Lambda, "Was expected '=>'", null);
-            IExpression? expression = Expression();
-            return new SelectorPredicate(variable, lambda, expression);
+            return new SelectorPredicate(lambdaExpr);
         }
-        GenerateError("Was expect a variable", parenthesis.Location);
+        GenerateError("Was expect a lambda expression", colon.Location);
         Synchronize(new List<TokenSubtypes> { TokenSubtypes.CloseBrace });
         return null;
     }
@@ -350,13 +308,15 @@ public partial class Parser
     {
         if (Match(TokenSubtypes.PostAction))
         {
+            Token? postActionColon = Consume(TokenSubtypes.Colon, "Was expected ':'", null);
             Consume(TokenSubtypes.OpenBrace, "Was expected '{'", null);
             Consume(TokenSubtypes.Type, "Effect name declaration expected", new List<TokenSubtypes> { TokenSubtypes.CloseBrace });
             Token? colon = Consume(TokenSubtypes.Colon, "Was expected ':'", null);
             IExpression? name = Expression();
+            Consume(TokenSubtypes.Comma, "Was expected ','", null);
             EffectInfo info = new EffectInfo(name, null, colon);
             Selector selector = null;
-            if (Match(TokenSubtypes.Selector))
+            if (Peek().Subtype == TokenSubtypes.Selector)
             {
                 selector = Selector();
             }

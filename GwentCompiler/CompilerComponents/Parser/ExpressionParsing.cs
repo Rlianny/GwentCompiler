@@ -24,7 +24,7 @@ public partial class Parser
                 return new AssignmentExpr(variable, value);
             }
 
-            GenerateError("Assignment objetive non valid.", equal.Location);
+            GenerateError("Assignment objective non valid.", equal.Location);
         }
 
         return expr;
@@ -38,16 +38,16 @@ public partial class Parser
         while (Match(new List<TokenSubtypes>() { TokenSubtypes.AND, TokenSubtypes.OR }))
         {
             Token op = Previous();
-            IExpression? rigth = Equality();
+            IExpression? right = Equality();
 
             switch (op.Subtype)
             {
                 case TokenSubtypes.AND:
-                    expr = new AndExpr(expr, op, rigth);
+                    expr = new AndExpr(expr, op, right);
                     break;
 
                 case TokenSubtypes.OR:
-                    expr = new OrExpr(expr, op, rigth);
+                    expr = new OrExpr(expr, op, right);
                     break;
             }
         }
@@ -63,16 +63,16 @@ public partial class Parser
         while (Match(new List<TokenSubtypes>() { TokenSubtypes.Inequality, TokenSubtypes.Equality }))
         {
             Token op = Previous();
-            IExpression? rigth = StringOperation();
+            IExpression? right = StringOperation();
 
             switch (op.Subtype)
             {
                 case TokenSubtypes.Equality:
-                    expr = new EqualityExpr(expr, op, rigth);
+                    expr = new EqualityExpr(expr, op, right);
                     break;
 
                 case TokenSubtypes.Inequality:
-                    expr = new InequalityExpr(expr, op, rigth);
+                    expr = new InequalityExpr(expr, op, right);
                     break;
             }
         }
@@ -89,16 +89,16 @@ public partial class Parser
         while (Match(new List<TokenSubtypes>() { TokenSubtypes.StringConcatenation, TokenSubtypes.StringConcatenationSpaced }))
         {
             Token op = Previous();
-            IExpression? rigth = Comparison();
+            IExpression? right = Comparison();
 
             switch (op.Subtype)
             {
                 case TokenSubtypes.StringConcatenation:
-                    expr = new StringConcatenationExpr(expr, op, rigth);
+                    expr = new StringConcatenationExpr(expr, op, right);
                     break;
 
                 case TokenSubtypes.StringConcatenationSpaced:
-                    expr = new StringConcatenationSpacedExpr(expr, op, rigth);
+                    expr = new StringConcatenationSpacedExpr(expr, op, right);
                     break;
             }
         }
@@ -115,24 +115,24 @@ public partial class Parser
         while (Match(new List<TokenSubtypes>() { TokenSubtypes.GreaterThan, TokenSubtypes.GreaterThanOrEqual, TokenSubtypes.LessThan, TokenSubtypes.LessThanOrEqual }))
         {
             Token op = Previous();
-            IExpression? rigth = Term();
+            IExpression? right = Term();
 
             switch (op.Subtype)
             {
                 case TokenSubtypes.GreaterThan:
-                    expr = new GreaterThanExpr(expr, op, rigth);
+                    expr = new GreaterThanExpr(expr, op, right);
                     break;
 
                 case TokenSubtypes.GreaterThanOrEqual:
-                    expr = new GreaterThanOrEqualExpr(expr, op, rigth);
+                    expr = new GreaterThanOrEqualExpr(expr, op, right);
                     break;
 
                 case TokenSubtypes.LessThan:
-                    expr = new LessThanExpr(expr, op, rigth);
+                    expr = new LessThanExpr(expr, op, right);
                     break;
 
                 case TokenSubtypes.LessThanOrEqual:
-                    expr = new LessThanOrEqualExpr(expr, op, rigth);
+                    expr = new LessThanOrEqualExpr(expr, op, right);
                     break;
             }
         }
@@ -148,16 +148,16 @@ public partial class Parser
         while (Match(new List<TokenSubtypes>() { TokenSubtypes.Addition, TokenSubtypes.Subtraction }))
         {
             Token op = Previous();
-            IExpression? rigth = Factor();
+            IExpression? right = Factor();
 
             switch (op.Subtype)
             {
                 case TokenSubtypes.Addition:
-                    expr = new AdditionExpr(expr, op, rigth);
+                    expr = new AdditionExpr(expr, op, right);
                     break;
 
                 case TokenSubtypes.Subtraction:
-                    expr = new SubstractionExpr(expr, op, rigth);
+                    expr = new SubtractionExpr(expr, op, right);
                     break;
             }
         }
@@ -173,16 +173,16 @@ public partial class Parser
         while (Match(new List<TokenSubtypes>() { TokenSubtypes.Multiplication, TokenSubtypes.Division }))
         {
             Token op = Previous();
-            IExpression? rigth = Power();
+            IExpression? right = Power();
 
             switch (op.Subtype)
             {
                 case TokenSubtypes.Multiplication:
-                    expr = new MultiplicationExpr(expr, op, rigth);
+                    expr = new MultiplicationExpr(expr, op, right);
                     break;
 
                 case TokenSubtypes.Division:
-                    expr = new DivisionExpr(expr, op, rigth);
+                    expr = new DivisionExpr(expr, op, right);
                     break;
             }
         }
@@ -198,8 +198,8 @@ public partial class Parser
         while (Match(TokenSubtypes.Potentiation))
         {
             Token op = Previous();
-            IExpression? rigth = Power();
-            expr = new PowerExpr(expr, op, rigth);
+            IExpression? right = Power();
+            expr = new PowerExpr(expr, op, right);
         }
 
         return expr;
@@ -211,22 +211,22 @@ public partial class Parser
         if (Match(new List<TokenSubtypes>() { TokenSubtypes.Subtraction, TokenSubtypes.Negation }))
         {
             Token op = Previous();
-            IExpression? rigth = Primary();
+            IExpression? right = Primary();
 
             switch (op.Subtype)
             {
                 case TokenSubtypes.Subtraction:
-                    return new Substraction(op, rigth);
+                    return new Subtraction(op, right);
 
                 case TokenSubtypes.Negation:
-                    return new NegatedExpr(op, rigth);
+                    return new NegatedExpr(op, right);
             }
         }
 
         return Primary();
     }
 
-    // *Primary* -> BoolLiteral | NumericLiteral | StringLiteral | Acces | MethodCalled;
+    // *Primary* -> BoolLiteral | NumericLiteral | StringLiteral | Access | MethodCalled;
     private IExpression? Primary()
     {
         if (Match(TokenSubtypes.True) || Match(TokenSubtypes.False)) return new BooleanLiteral(Previous());
@@ -237,12 +237,28 @@ public partial class Parser
 
         if (Match(TokenSubtypes.OpenParenthesis))
         {
+            Token open = Previous();
             IExpression? expr = Expression();
             Token? close = Consume(TokenSubtypes.CloseParenthesis, ") expected after expression.", null);
 
             if (close == null) return null;
+            expr = new GroupExpression(expr);
 
-            return new GroupExpression(expr);
+            if(expr is GroupExpression group && group.Expression is Variable var)
+            {
+                if(Match(TokenSubtypes.Lambda))
+                {
+                    Token lambda = Previous();
+                    IExpression? filter = Expression();
+                    return new LambdaExpr(var, lambda, filter);
+                }
+                
+                else
+                {
+                    GenerateError("Invalid group expression", open.Location);
+                }
+            }
+            return expr;
         }
 
         if (Match(TokenSubtypes.Identifier))
@@ -261,11 +277,11 @@ public partial class Parser
 
                 if (Match(new List<TokenSubtypes>() { TokenSubtypes.TriggerPlayer, TokenSubtypes.Board, TokenSubtypes.HandOfPlayer, TokenSubtypes.FieldOfPlayer, TokenSubtypes.GraveyardOfPlayer, TokenSubtypes.DeckOfPlayer, TokenSubtypes.Owner, TokenSubtypes.Type, TokenSubtypes.Name, TokenSubtypes.Faction, TokenSubtypes.Power }))
                 {
-                    Token acces = Previous();
+                    Token access = Previous();
                     IExpression? args = null;
 
 
-                    if (acces.Subtype == TokenSubtypes.HandOfPlayer || acces.Subtype == TokenSubtypes.FieldOfPlayer || acces.Subtype == TokenSubtypes.GraveyardOfPlayer || acces.Subtype == TokenSubtypes.DeckOfPlayer || acces.Subtype == TokenSubtypes.Type || acces.Subtype == TokenSubtypes.Name || acces.Subtype == TokenSubtypes.Faction || acces.Subtype == TokenSubtypes.Power)
+                    if (access.Subtype == TokenSubtypes.HandOfPlayer || access.Subtype == TokenSubtypes.FieldOfPlayer || access.Subtype == TokenSubtypes.GraveyardOfPlayer || access.Subtype == TokenSubtypes.DeckOfPlayer || access.Subtype == TokenSubtypes.Type || access.Subtype == TokenSubtypes.Name || access.Subtype == TokenSubtypes.Faction || access.Subtype == TokenSubtypes.Power)
                     {
                         if (Match(TokenSubtypes.OpenParenthesis))
                         {
@@ -276,38 +292,38 @@ public partial class Parser
 
                     ContextAccessExpr? expr = null;
 
-                    switch (acces.Subtype)
+                    switch (access.Subtype)
                     {
                         case TokenSubtypes.TriggerPlayer:
-                            expr = new TriggerPlayerAccessExpr(var, dot, acces, args);
+                            expr = new TriggerPlayerAccessExpr(var, dot, access, args);
                             break;
 
                         case TokenSubtypes.Board:
-                            expr = new BoardAccessExpr(var, dot, acces, args);
+                            expr = new BoardAccessExpr(var, dot, access, args);
                             break;
 
                         case TokenSubtypes.HandOfPlayer:
-                            expr = new HandOfPlayerAccessExpr(var, dot, acces, args);
+                            expr = new HandOfPlayerAccessExpr(var, dot, access, args);
                             break;
 
                         case TokenSubtypes.FieldOfPlayer:
-                            expr = new FieldOfPlayerAccessExpr(var, dot, acces, args);
+                            expr = new FieldOfPlayerAccessExpr(var, dot, access, args);
                             break;
 
                         case TokenSubtypes.GraveyardOfPlayer:
-                            expr = new GraveyardOfPlayerAccessExpr(var, dot, acces, args);
+                            expr = new GraveyardOfPlayerAccessExpr(var, dot, access, args);
                             break;
 
                         case TokenSubtypes.DeckOfPlayer:
-                            expr = new DeckOfPlayerAccessExpr(var, dot, acces, args);
+                            expr = new DeckOfPlayerAccessExpr(var, dot, access, args);
                             break;
 
                         case TokenSubtypes.Owner:
-                            expr = new CardOwnerAccessExpr(var, dot, acces, args);
+                            expr = new CardOwnerAccessExpr(var, dot, access, args);
                             break;
 
                         default:
-                            expr = new CardPropertyAccesExpr(var, dot, acces, args);
+                            expr = new CardPropertyAccessExpr(var, dot, access, args);
                             break;
                     }
 
@@ -319,8 +335,10 @@ public partial class Parser
                     return expr;
                 }
 
-                else GenerateError("Expression expected", Peek().Location); // Si ninguno de los casos coincide, significa que estamos sentados sobre un token que no puede iniciar una expresión
-                Synchronize(new List<TokenSubtypes> { TokenSubtypes.Semicolon, TokenSubtypes.Comma, TokenSubtypes.CloseBrace});
+                
+                return var;
+                //else GenerateError("Expression expected", Peek().Location); // Si ninguno de los casos coincide, significa que estamos sentados sobre un token que no puede iniciar una expresión
+                //Synchronize(new List<TokenSubtypes> { TokenSubtypes.Semicolon, TokenSubtypes.Comma, TokenSubtypes.CloseBrace});
 
             }
 

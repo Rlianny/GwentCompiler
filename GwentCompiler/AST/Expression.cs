@@ -1,16 +1,16 @@
 namespace GwentCompiler;
 public interface IExpression : IASTNode;
 
-public abstract class BinaryExpression(IExpression? left, Token op, IExpression? rigth) : object(), IExpression
+public abstract class BinaryExpression(IExpression? left, Token op, IExpression? right) : object(), IExpression
 {
     public IExpression? Left { get; private set; } = left;
-    public IExpression? Right { get; private set; } = rigth;
+    public IExpression? Right { get; private set; } = right;
     public Token Operator { get; private set; } = op;
 }
 
-public abstract class UnaryExpression(Token op, IExpression? rigth) : IExpression
+public abstract class UnaryExpression(Token op, IExpression? right) : IExpression
 {
-    public IExpression? Rigth { get; private set; } = rigth;
+    public IExpression? Right { get; private set; } = right;
     public Token Operator { get; private set; } = op;
 }
 
@@ -35,17 +35,17 @@ public class AssignmentExpr(Variable? name, IExpression? value) : IExpression
     public IExpression? Value { get; private set; } = value;
 }
 
-public class IncrementOrDecrementOperationExpr(Token op, Variable? rigth) : IExpression
+public class IncrementOrDecrementOperationExpr(Token op, Variable? right) : IExpression
 {
-    public Variable? Name { get; private set; } = rigth;
+    public Variable? Name { get; private set; } = right;
     public Token Operation { get; private set; } = op;
 }
 
-public abstract class ContextAccessExpr(Variable variable, Token dot, Token acces, IExpression? args) : IExpression
+public abstract class ContextAccessExpr(Variable variable, Token dot, Token access, IExpression? args) : IExpression
 {
     public Token Dot { get; private set; } = dot;
     public Variable Variable { get; private set; } = variable;
-    public Token Acces { get; private set; } = acces;
+    public Token Access { get; private set; } = access;
     public IExpression? Args { get; private set; } = args;
 }
 
@@ -56,49 +56,56 @@ public abstract class ContextMethodsExpr(IExpression? contextAccessExpr, Token m
     public IExpression? Args { get; private set; } = args;
 }
 
+public class LambdaExpr(Variable variable, Token lambda, IExpression expression) : IExpression
+{
+    public Variable Variable {get; private set;} = variable;
+    public Token Lambda {get; private set;} = lambda;
+    public IExpression? Filter {get; private set;} = expression;
+}
+
 #region BinaryExpressionSubtypes
-public abstract class ArithmeticBinaryExpression(IExpression? left, Token op, IExpression? rigth) : BinaryExpression(left, op, rigth);
+public abstract class ArithmeticBinaryExpression(IExpression? left, Token op, IExpression? right) : BinaryExpression(left, op, right);
 
-public abstract class BooleanOperationBinaryExpression(IExpression? left, Token op, IExpression? rigth) : BinaryExpression(left, op, rigth);
+public abstract class BooleanOperationBinaryExpression(IExpression? left, Token op, IExpression? right) : BinaryExpression(left, op, right);
 
-public abstract class StringOperationBinaryExpression(IExpression? left, Token op, IExpression? rigth) : BinaryExpression(left, op, rigth);
+public abstract class StringOperationBinaryExpression(IExpression? left, Token op, IExpression? right) : BinaryExpression(left, op, right);
 
-public class AndExpr(IExpression? left, Token op, IExpression? rigth) : BooleanOperationBinaryExpression(left, op, rigth);
+public class AndExpr(IExpression? left, Token op, IExpression? right) : BooleanOperationBinaryExpression(left, op, right);
 
-public class OrExpr(IExpression? left, Token op, IExpression? rigth) : BooleanOperationBinaryExpression(left, op, rigth);
+public class OrExpr(IExpression? left, Token op, IExpression? right) : BooleanOperationBinaryExpression(left, op, right);
 
-public class EqualityExpr(IExpression? left, Token op, IExpression? rigth) : BooleanOperationBinaryExpression(left, op, rigth);
+public class EqualityExpr(IExpression? left, Token op, IExpression? right) : BooleanOperationBinaryExpression(left, op, right);
 
-public class InequalityExpr(IExpression? left, Token op, IExpression? rigth) : BooleanOperationBinaryExpression(left, op, rigth);
+public class InequalityExpr(IExpression? left, Token op, IExpression? right) : BooleanOperationBinaryExpression(left, op, right);
 
-public class StringConcatenationExpr(IExpression? left, Token op, IExpression? rigth) : StringOperationBinaryExpression(left, op, rigth);
+public class StringConcatenationExpr(IExpression? left, Token op, IExpression? right) : StringOperationBinaryExpression(left, op, right);
 
-public class StringConcatenationSpacedExpr(IExpression? left, Token op, IExpression? rigth) : StringOperationBinaryExpression(left, op, rigth);
+public class StringConcatenationSpacedExpr(IExpression? left, Token op, IExpression? right) : StringOperationBinaryExpression(left, op, right);
 
-public class GreaterThanExpr(IExpression? left, Token op, IExpression? rigth) : BooleanOperationBinaryExpression(left, op, rigth);
+public class GreaterThanExpr(IExpression? left, Token op, IExpression? right) : BooleanOperationBinaryExpression(left, op, right);
 
-public class GreaterThanOrEqualExpr(IExpression? left, Token op, IExpression? rigth) : BooleanOperationBinaryExpression(left, op, rigth);
+public class GreaterThanOrEqualExpr(IExpression? left, Token op, IExpression? right) : BooleanOperationBinaryExpression(left, op, right);
 
-public class LessThanExpr(IExpression? left, Token op, IExpression? rigth) : BooleanOperationBinaryExpression(left, op, rigth);
+public class LessThanExpr(IExpression? left, Token op, IExpression? right) : BooleanOperationBinaryExpression(left, op, right);
 
-public class LessThanOrEqualExpr(IExpression? left, Token op, IExpression? rigth) : BooleanOperationBinaryExpression(left, op, rigth);
+public class LessThanOrEqualExpr(IExpression? left, Token op, IExpression? right) : BooleanOperationBinaryExpression(left, op, right);
 
-public class AdditionExpr(IExpression? left, Token op, IExpression? rigth) : ArithmeticBinaryExpression(left, op, rigth);
+public class AdditionExpr(IExpression? left, Token op, IExpression? right) : ArithmeticBinaryExpression(left, op, right);
 
-public class SubstractionExpr(IExpression? left, Token op, IExpression? rigth) : ArithmeticBinaryExpression(left, op, rigth);
+public class SubtractionExpr(IExpression? left, Token op, IExpression? right) : ArithmeticBinaryExpression(left, op, right);
 
-public class MultiplicationExpr(IExpression? left, Token op, IExpression? rigth) : ArithmeticBinaryExpression(left, op, rigth);
+public class MultiplicationExpr(IExpression? left, Token op, IExpression? right) : ArithmeticBinaryExpression(left, op, right);
 
-public class DivisionExpr(IExpression? left, Token op, IExpression? rigth) : ArithmeticBinaryExpression(left, op, rigth);
+public class DivisionExpr(IExpression? left, Token op, IExpression? right) : ArithmeticBinaryExpression(left, op, right);
 
-public class PowerExpr(IExpression? left, Token op, IExpression? rigth) : ArithmeticBinaryExpression(left, op, rigth);
+public class PowerExpr(IExpression? left, Token op, IExpression? right) : ArithmeticBinaryExpression(left, op, right);
 
 #endregion
 
 #region UnaryExpressionSubtypes
-public class NegatedExpr(Token op, IExpression? rigth) : UnaryExpression(op, rigth);
+public class NegatedExpr(Token op, IExpression? right) : UnaryExpression(op, right);
 
-public class Substraction(Token op, IExpression? rigth) : UnaryExpression(op, rigth);
+public class Subtraction(Token op, IExpression? right) : UnaryExpression(op, right);
 
 #endregion
 
@@ -113,36 +120,36 @@ public class BooleanLiteral(Token? value) : Atom(value);
 
 #region ContextAccessExpressionSubtypes
 
-public class CardPropertyAccesExpr(Variable variable, Token dot, Token acces, IExpression? args) : ContextAccessExpr(variable, dot, acces, args);
+public class CardPropertyAccessExpr(Variable variable, Token dot, Token access, IExpression? args) : ContextAccessExpr(variable, dot, access, args);
 
-public class TriggerPlayerAccessExpr(Variable variable, Token dot, Token acces, IExpression? args) : ContextAccessExpr(variable, dot, acces, args);
+public class TriggerPlayerAccessExpr(Variable variable, Token dot, Token access, IExpression? args) : ContextAccessExpr(variable, dot, access, args);
 
-public class BoardAccessExpr(Variable variable, Token dot, Token acces, IExpression? args) : ContextAccessExpr(variable, dot, acces, args);
+public class BoardAccessExpr(Variable variable, Token dot, Token access, IExpression? args) : ContextAccessExpr(variable, dot, access, args);
 
-public class HandOfPlayerAccessExpr(Variable variable, Token dot, Token acces, IExpression? args) : ContextAccessExpr(variable, dot, acces, args);
+public class HandOfPlayerAccessExpr(Variable variable, Token dot, Token access, IExpression? args) : ContextAccessExpr(variable, dot, access, args);
 
-public class FieldOfPlayerAccessExpr(Variable variable, Token dot, Token acces, IExpression? args) : ContextAccessExpr(variable, dot, acces, args);
+public class FieldOfPlayerAccessExpr(Variable variable, Token dot, Token access, IExpression? args) : ContextAccessExpr(variable, dot, access, args);
 
-public class GraveyardOfPlayerAccessExpr(Variable variable, Token dot, Token acces, IExpression? args) : ContextAccessExpr(variable, dot, acces, args);
+public class GraveyardOfPlayerAccessExpr(Variable variable, Token dot, Token access, IExpression? args) : ContextAccessExpr(variable, dot, access, args);
 
-public class DeckOfPlayerAccessExpr(Variable variable, Token dot, Token acces, IExpression? args) : ContextAccessExpr(variable, dot, acces, args);
+public class DeckOfPlayerAccessExpr(Variable variable, Token dot, Token access, IExpression? args) : ContextAccessExpr(variable, dot, access, args);
 
-public class CardOwnerAccessExpr(Variable variable, Token dot, Token acces, IExpression? args) : ContextAccessExpr(variable, dot, acces, args);
+public class CardOwnerAccessExpr(Variable variable, Token dot, Token access, IExpression? args) : ContextAccessExpr(variable, dot, access, args);
 
 #endregion
 
-#region ContextMethodExpressionSyptypes
+#region ContextMethodExpressionSubtypes
 
-public class FindMethodExpr(IExpression? acces, Token method, IExpression? args) : ContextMethodsExpr(acces, method, args);
+public class FindMethodExpr(IExpression? access, Token method, IExpression? args) : ContextMethodsExpr(access, method, args);
 
-public class PushMethodExpr(IExpression? acces, Token method, IExpression? args) : ContextMethodsExpr(acces, method, args);
+public class PushMethodExpr(IExpression? access, Token method, IExpression? args) : ContextMethodsExpr(access, method, args);
 
-public class SendBottomMethodExpr(IExpression? acces, Token method, IExpression? args) : ContextMethodsExpr(acces, method, args);
+public class SendBottomMethodExpr(IExpression? access, Token method, IExpression? args) : ContextMethodsExpr(access, method, args);
 
-public class PopMethodExpr(IExpression? acces, Token method, IExpression? args) : ContextMethodsExpr(acces, method, args);
+public class PopMethodExpr(IExpression? access, Token method, IExpression? args) : ContextMethodsExpr(access, method, args);
 
-public class RemoveMethodExpr(IExpression? acces, Token method, IExpression? args) : ContextMethodsExpr(acces, method, args);
+public class RemoveMethodExpr(IExpression? access, Token method, IExpression? args) : ContextMethodsExpr(access, method, args);
 
-public class ShuffleMethodExpr(IExpression? acces, Token method, IExpression? args) : ContextMethodsExpr(acces, method, args);
+public class ShuffleMethodExpr(IExpression? access, Token method, IExpression? args) : ContextMethodsExpr(access, method, args);
 
 #endregion

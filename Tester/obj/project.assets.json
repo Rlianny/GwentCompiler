@@ -27,19 +27,19 @@
     ]
   },
   "packageFolders": {
-    "/home/lianny/.nuget/packages/": {}
+    "C:\\Users\\Lianny Reve\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "/home/lianny/$/home/lianny/Proyecto/ProyectoGwent++/Compiler/Tester/Tester.csproj",
+      "projectUniqueName": "C:\\Lianny\\Proyectos\\Gwent++\\Compiler\\Tester\\Tester.csproj",
       "projectName": "Tester",
-      "projectPath": "/home/lianny/$/home/lianny/Proyecto/ProyectoGwent++/Compiler/Tester/Tester.csproj",
-      "packagesPath": "/home/lianny/.nuget/packages/",
-      "outputPath": "/home/lianny/$/home/lianny/Proyecto/ProyectoGwent++/Compiler/Tester/obj/",
+      "projectPath": "C:\\Lianny\\Proyectos\\Gwent++\\Compiler\\Tester\\Tester.csproj",
+      "packagesPath": "C:\\Users\\Lianny Reve\\.nuget\\packages\\",
+      "outputPath": "C:\\Lianny\\Proyectos\\Gwent++\\Compiler\\Tester\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "/home/lianny/.nuget/NuGet/NuGet.Config"
+        "C:\\Users\\Lianny Reve\\AppData\\Roaming\\NuGet\\NuGet.Config"
       ],
       "originalTargetFrameworks": [
         "net8.0"
@@ -51,8 +51,8 @@
         "net8.0": {
           "targetAlias": "net8.0",
           "projectReferences": {
-            "/home/lianny/$/home/lianny/Proyecto/ProyectoGwent++/Compiler/GwentCompiler/GwentCompiler.csproj": {
-              "projectPath": "/home/lianny/$/home/lianny/Proyecto/ProyectoGwent++/Compiler/GwentCompiler/GwentCompiler.csproj"
+            "C:\\Lianny\\Proyectos\\Gwent++\\Compiler\\GwentCompiler\\GwentCompiler.csproj": {
+              "projectPath": "C:\\Lianny\\Proyectos\\Gwent++\\Compiler\\GwentCompiler\\GwentCompiler.csproj"
             }
           }
         }
@@ -61,6 +61,11 @@
         "warnAsError": [
           "NU1605"
         ]
+      },
+      "restoreAuditProperties": {
+        "enableAudit": "true",
+        "auditLevel": "low",
+        "auditMode": "direct"
       }
     },
     "frameworks": {
@@ -82,7 +87,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "/home/lianny/.dotnet/sdk/8.0.101/PortableRuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.303/PortableRuntimeIdentifierGraph.json"
       }
     }
   }
