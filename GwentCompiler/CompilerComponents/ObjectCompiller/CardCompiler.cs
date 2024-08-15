@@ -34,7 +34,7 @@ public partial class ObjectCompiler
         if (node.Power != null && interpreter.Interpret(node.Power) is double intPower) power = intPower;
 
         if(cardType != null && cardName != null && cardFaction != null && range != null && onAct != null && effectDescription != null && power != null && characterDescription != null && quote != null) 
-        return new CompiledCard(cardType, cardName, cardFaction, range, onAct, effectDescription, (int)power, characterDescription, quote);
+        return new CompiledCard(cardType, "Morty " + cardName, cardFaction, range, onAct, effectDescription, (int)power, characterDescription, quote);
 
         else throw new RuntimeError("Missing card fields", node.CardLocation.Location);
 

@@ -26,6 +26,18 @@ public partial class ObjectCompiler : VisitorBase<object>
                     Console.WriteLine(ex.Message);
                 }
             }
+            if (node is EffectDeclaration effectDeclaration)
+            {
+                try
+                {
+                    compiledObjects.Add(GetCompiledEffect(effectDeclaration));
+                }
+                catch (RuntimeError ex)
+                {
+                    hadError = true;
+                    Console.WriteLine(ex.Message);
+                }
+            }
         }
 
         return compiledObjects;

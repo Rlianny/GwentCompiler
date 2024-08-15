@@ -1,0 +1,52 @@
+card
+{
+    Name: "Barbaro",
+    Type: "Plata",
+    Faction: "Ch"@"a"@"m"@"a"@"s",
+    Power: 5,
+    Range: ["Melee", "Siege"],
+    OnActivation:
+    [{
+ Effect:
+        {
+            Name: "Damage",
+            Amount: 5 * 8.1,
+        },
+        Selector:
+        {
+            Source: "hand",
+            Single: true,
+            Predicate: (unit) => unit.Faction == "Chamas"
+        },
+        PostAction:
+        {
+            Type: "ReturnToDeck",
+            PostAction: 
+            {
+                Type: "ReturnToDeck",
+            }
+        }
+    }   
+    ]
+    CharacterDescription: "Relaciones publicas en la empresa del sexo",
+    Quote: "If you like pina colada",
+    EffectDescription: "Robar una carta",
+}
+
+effect{
+    Name : "Dam" @ "age",
+    Params:
+    {
+        Amount: Number
+        Word: String
+    },
+    Action: (targets, context) =>
+    {
+        if(target)
+        {
+            i = 0;
+            while(i++ > Amount)
+                power = 2 + 1;
+        }
+    };
+}

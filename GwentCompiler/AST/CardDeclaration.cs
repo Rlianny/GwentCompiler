@@ -2,7 +2,7 @@ namespace GwentCompiler;
 public class CardDeclaration(Token cardLocation) : IProgramNode
 {
     public CardTypeDeclaration? Type { get; private set; }
-    public CardNameDeclaration? Name { get; private set; }
+    public NameDeclaration? Name { get; private set; }
     public CardFactionDeclaration? Faction { get; private set; }
     public CardRangeDeclaration? Range { get; private set; }
     public CardPowerDeclaration? Power { get; private set; }
@@ -12,10 +12,8 @@ public class CardDeclaration(Token cardLocation) : IProgramNode
     public CardQuoteDeclaration? Quote { get; private set; }
     public Token CardLocation { get; private set; } = cardLocation;
 
-    public bool SetComponent(CardComponent component)
+    public bool SetComponent(ICardComponent component)
     {
-        if (component == null) return true;
-        
         switch (component.GetType().Name)
         {
             case "CardTypeDeclaration":
@@ -27,11 +25,11 @@ public class CardDeclaration(Token cardLocation) : IProgramNode
                 }
                 return false;
 
-            case "CardNameDeclaration":
+            case "NameDeclaration":
 
                 if (Name == null)
                 {
-                    Name = (CardNameDeclaration)component;
+                    Name = (NameDeclaration)component;
                     return true;
                 }
                 return false;

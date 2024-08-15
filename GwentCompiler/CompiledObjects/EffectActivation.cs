@@ -15,7 +15,7 @@ public class EffectActivation
         Parameters = @params;
         SelectorSource = source;
         SelectorSingle = single;
-        // predicate 
+        // Predicate
         PostAction = postAction;
     }
 

@@ -1,3 +1,45 @@
 namespace GwentCompiler;
 
-public class EffectDeclaration() : IProgramNode;
+public class EffectDeclaration(Token effectToken) : IProgramNode
+{
+    public NameDeclaration? Name { get; private set; }
+    public EffectParamsDeclaration? Params {get; private set;}
+    public EffectAction? Action { get; private set;}
+    public Token EffectLocation { get; private set; } = effectToken;
+
+    public bool SetComponent(IEffectComponent component)
+    {
+        if (component == null) return true;
+        
+        switch (component.GetType().Name)
+        {
+            case "NameDeclaration":
+
+                if (Name == null)
+                {
+                    Name = (NameDeclaration)component;
+                    return true;
+                }
+                return false;
+
+            case "EffectParamsDeclaration":
+
+                if (Params == null)
+                {
+                    Params = (EffectParamsDeclaration)component;
+                    return true;
+                }
+                return false;
+
+            case "EffectAction":
+
+                if (Action == null)
+                {
+                    Action = (EffectAction)component;
+                    return true;
+                }
+                return false;
+        }
+        return false;
+    }
+}

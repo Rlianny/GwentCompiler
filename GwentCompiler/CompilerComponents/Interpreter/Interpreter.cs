@@ -24,11 +24,11 @@ public partial class Interpreter : VisitorBase<Object>
         }
     }
 
-    public object? Interpret(CardComponent cardComponent)
+    public object? Interpret(IComponent component)
     {
         try
         {
-            return VisitBase(cardComponent);
+            return VisitBase(component);
         }
         catch (RuntimeError ex)
         {

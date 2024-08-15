@@ -23,6 +23,10 @@ public partial class Parser
             {
                 return new AssignmentExpr(variable, value);
             }
+            // if(expr is CardPropertyAccessExpr cardProperty)
+            // {
+            //     return new AssignmentExpr(cardProperty, value);
+            // }
 
             GenerateError("Assignment objective non valid.", equal.Location);
         }

@@ -74,6 +74,10 @@ static class Program
             {
                 System.Console.WriteLine(compiledCard.ToString());
             }
+            if (obj is CompiledEffect compiledEffect)
+            {
+                System.Console.WriteLine(compiledEffect.ToString());
+            }
         }
         
         
